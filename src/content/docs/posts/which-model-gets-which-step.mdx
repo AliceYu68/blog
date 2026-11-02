@@ -121,17 +121,3 @@ Routing without measurement is folklore. For each pinned step, track:
 - **Escalation rate** — how often triage hands off to the strong model; if everything escalates, your card is wrong.
 
 When a new Evaluate post lands on this blog, ask one question only: *which existing step does this slug threaten or improve?* If the answer is "none," it is news, not a routing change.
-
-## Frequently asked questions
-
-### Should every step use the strongest model?
-
-No. Strong models earn their keep on ambiguous or long-horizon work. Using them for triage and formatting burns budget and often adds latency without better outcomes.
-
-### What is `vectoree/auto` for?
-
-A smart default when you have not pinned a slug yet, or when the step is interchangeable across several catalog rows. Pin a slug once a step has a clear quality or cost requirement.
-
-### How do I change the model for one step?
-
-Keep one OpenAI-compatible client and one project key. Change only the `model` field to another catalog slug from search, or temporarily back to `vectoree/auto`.

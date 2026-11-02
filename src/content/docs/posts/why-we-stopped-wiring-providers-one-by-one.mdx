@@ -106,17 +106,3 @@ A few habits survived the cleanup, and they still matter.
 - **Measure spend per project.** If you cannot see cost, you cannot defend routing choices.
 
 If you are still pasting a new provider key every month, the pain is not imaginary. Collapse the door first. Then decide [which model gets which step](/posts/which-model-gets-which-step/).
-
-## Frequently asked questions
-
-### Is a gateway only about saving API keys?
-
-No. Keys are the visible pain. The deeper cost is five client shapes, five rate-limit behaviors, and no shared way to move a step to another model when the first one fails or prices shift.
-
-### Do I still need provider accounts?
-
-You still choose models by catalog slug. The point is your app talks to one OpenAI-compatible endpoint and one project key, instead of embedding every vendor SDK in your agent loop.
-
-### When is a direct provider SDK still fine?
-
-For a single-vendor spike or a demo that will never change models. The moment you need failover, cost routing, or a second modality on the same credential, the hand-wired stack starts to tax every change.
