@@ -1,0 +1,129 @@
+---
+title: "Moon Sling: A One-File Gravity Game, and What It Cost"
+description: "Five shots, four hoops, one moon. The prompt and the clock are real. The token bill is not measured."
+cover: /covers/moon-sling-one-file-browser-game.jpg
+category: solution
+tags:
+  - agents
+  - models
+  - gateway
+sidebar:
+  label: "Moon Sling"
+  order: 8
+nav:
+  "The game": "What is Moon Sling?"
+  "The prompt": "What prompt reproduces it?"
+  "Time and cost": "What did this run cost?"
+  "What broke": "What broke?"
+  "Run it on the gateway": "How do I run it through Vectoree?"
+faq:
+  - question: Where do I play Moon Sling?
+    answer: The game is at https://blog.vectoree.ai/games/moon-sling/. Drag from the pad, or aim with the arrow keys and fire with Space. Five shots.
+  - question: What did Moon Sling cost to build?
+    answer: Not measured. No Vectoree key was available, so the gateway was not called and no token usage was returned.
+  - question: Why is the field small on a tall phone?
+    answer: The playfield is a wide 1000 by 640 world. On a narrow screen it stays full width and sits in the middle. Drag still fires, and a phone drag in the check scored a hoop.
+links:
+  - label: How was Ring Glide built?
+    href: /posts/ring-glide-one-file-threejs-game/
+  - label: How do I call the gateway?
+    href: /posts/call-models-through-vectoree-gateway/
+---
+
+import CtaRow from '../../../components/post/CtaRow.astro';
+import PostLink from '../../../components/post/PostLink.astro';
+
+A gravity slingshot is a small game: pull, release, watch the curve, thread a hoop. [awesome-fable-5.2](https://github.com/fengyiqicoder/awesome-fable-5.2) collects several of those from the week Claude Fable 5.2 launched (9 November 2026). Moon Sling is a new one. The moon, the hoops, and the integrator are original. No art files.
+
+![A pebble leaving a lit hoop, score 300, two of four hoops taken, the moon in the middle.](/posts/moon-sling-one-file-browser-game/01-shot.jpg)
+
+<CtaRow items={[
+  { label: 'Play Moon Sling', href: '/games/moon-sling/' },
+  { label: 'Try Vectoree', href: 'https://vectoree.ai', variant: 'secondary' },
+]} />
+
+## The game
+
+[Play it at /games/moon-sling/](/games/moon-sling/). One HTML file. Canvas 2D. No libraries.
+
+The moon sits near the middle and pulls with `GM / r²`. You get five shots. Drag back from the pad and release. The velocity points back through the pad, like a sling. Left and right change aim, up and down change power, Space fires. A dashed preview uses the same integrator, so the line you see is the shot you get.
+
+Four hoops. Each scores 150 once. Two hoops in one shot add 100 when that shot ends. Hitting the moon ends the shot. Leaving the field ends it too. A shot also ends after eight seconds so a slow arc cannot run forever.
+
+![The title screen, with the dashed preview already bending over the moon.](/posts/moon-sling-one-file-browser-game/02-aim.jpg)
+
+On a tall phone the 1000×640 field stays wide and letterboxed. Stars fill the bars. Drag still works. [Ring Glide](/posts/ring-glide-one-file-threejs-game/) and [Pocket Tilt](/posts/pocket-tilt-one-file-browser-game/) are the other two games. The list is [/games/](/games/).
+
+## The prompt
+
+This is the spec the file was built from. The numbers are the ones in the page, including the default aim that actually scores. It was not sent to a model API in this session.
+
+```text
+Build a single-file browser game at index.html. Canvas 2D only. No libraries, no images, no copied art.
+
+Title: Moon Sling.
+
+A pebble launches from a pad and falls under the gravity of a moon. The player threads circular hoops. Drag from the pad to pull back and release to fire (velocity points from the pull back through the pad). Keyboard: left/right aim, up/down power, Space fires. Space or Enter on the title screen starts the round and does not also fire. Show a dashed trajectory preview using the same gravity. Draw the rubber band only while aiming, not during flight. Five shots. Hitting the moon ends the shot. Leaving the playfield ends the shot. Each hoop scores 150 once. Two hoops in one shot add 100 when the shot ends. A title screen and a results screen. Play again. Remember the best score in localStorage.
+
+World 1000 by 640. Moon at (520, 300), radius 52, GM = 7200000. Pad at (156, 518). Pebble radius 8. Hoops at (780, 168, r 34), (834, 412, r 32), (318, 148, r 30), (246, 332, r 28). Default keyboard aim -1.05 radians and power 240, which threads two hoops.
+
+Look: ink space, seeded stars, a flat moon with an acid rim and three crater circles, cream pebble, hoops that turn acid when scored. No textures. A small "Built with Vectoree" link to https://vectoree.ai and a link back to /games/. Arrow keys and Space must not scroll the page.
+
+One HTML file.
+```
+
+## Time and cost
+
+Moon Sling took the extra pass. The clock includes the fix after the first play, and it overlaps the other two games.
+
+| | |
+| --- | --- |
+| Wall clock | 19 min 11 s (2026-11-12 05:39:42Z to 05:58:53Z) |
+| Iterations | 3 |
+| Model | not called |
+| Prompt tokens | not measured |
+| Completion tokens | not measured |
+| Dollar cost | not measured |
+| Vectoree gateway | not used |
+
+Iteration 1 was the first file. Iteration 2 happened before any browser check. Space on the title screen started the round and fired in the same keydown. The on-screen hint sat on the pad. And a Python copy of this gravity showed the first default aim, about −0.95 radians at power 250, missed every hoop. Aim −1.05 at power 240 hits two. The first headless play used that aim: Space scored 300, and the HUD read 2/4 hoops with 4 shots left.
+
+Iteration 3 was the picture. The rubber band stayed tied to the pebble for the whole flight, so two acid lines crossed the moon. The band now drops at launch. The retest scored 300 from Space. A drag on a 390×844 viewport scored 150.
+
+<PostLink href="/posts/call-models-through-vectoree-gateway/">Where do those token counts come from when you do have a key?</PostLink>
+
+## What broke
+
+Three separate faults.
+
+The Space key fell through. Starting the round and firing have to be different keydowns. The handler returns after start.
+
+The default shot was a miss. Guessing an angle is a bad way to place hoops. The same acceleration function, run outside the browser, printed which aims score. The keyboard default is one of those aims. The preview on the title screen is that shot.
+
+The band. Drawing a line from the pad to the pebble is correct while you pull and wrong once the pebble is free. Flight draws the pebble and a short trail. The pad stays a small square.
+
+![A phone drag already in flight, one hoop lit, score 150. The field is wide, so a tall screen leaves starfield above and below.](/posts/moon-sling-one-file-browser-game/03-phone.jpg)
+
+## Run it on the gateway
+
+[Fable 5.2](https://platform.claude.com/docs/en/models/fable-5-2/overview) is the model this week of one-file games is about. Anthropic lists it at $8 per million input tokens and $40 per million output tokens. Use that only as their published rate. This post has no measured token count to multiply.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://vectoree.ai/api/v1",
+    api_key="sk-ve-v1-your-key",
+)
+
+resp = client.chat.completions.create(
+    model="claude-fable-5-2",
+    messages=[{"role": "user", "content": prompt}],
+)
+print(resp.choices[0].message.content)
+print(resp.usage)
+```
+
+Confirm `claude-fable-5-2` in Model Plaza first. The key stays on the server. [The gateway post](/posts/call-models-through-vectoree-gateway/) is the longer version of that setup.
+
+Open the file, press Sling, then Space, and do not touch the arrows. A faithful run threads two hoops on that default. If the preview and the pebble disagree, the preview is using a different step than the flight. Make them one function.
