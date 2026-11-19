@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img">
+  <title>OpenAI standard rates for GPT-6.2 Astra and Sol</title>
+  <desc>Per million tokens, OpenAI standard: Astra input $8, cached input $0.40, 30-minute cache write $10, output $40. Sol input $2, cached input $0.10, 30-minute cache write $2.50, output $10. Sol is one quarter of Astra on each of these four rates. Not a Vectoree price.</desc>
+  <rect width="1600" height="900" fill="#101010"/>
+  <text x="72" y="78" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2.6">OPENAI PUBLISHED CARD · PER MILLION TOKENS</text>
+  <text x="72" y="148" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="52" font-weight="700">Astra versus Sol, standard</text>
+  <text x="72" y="198" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="500">On every row, Sol is one quarter of Astra. Vectoree does not invoice this card.</text>
+
+  <text x="560" y="268" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">ASTRA</text>
+  <text x="1080" y="268" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">SOL</text>
+
+  <text x="72" y="340" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Input</text>
+  <text x="560" y="344" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$8</text>
+  <rect x="760" y="314" width="280" height="22" fill="#d8ff00"/>
+  <text x="1080" y="344" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$2</text>
+  <rect x="1280" y="314" width="70" height="22" fill="#f3f3ec"/>
+
+  <text x="72" y="450" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Cached input</text>
+  <text x="560" y="454" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$0.40</text>
+  <rect x="760" y="424" width="280" height="22" fill="#d8ff00"/>
+  <text x="1080" y="454" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$0.10</text>
+  <rect x="1280" y="424" width="70" height="22" fill="#f3f3ec"/>
+
+  <text x="72" y="548" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Cache write</text>
+  <text x="72" y="582" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="500">30-minute retention</text>
+  <text x="560" y="568" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$10</text>
+  <rect x="760" y="538" width="280" height="22" fill="#d8ff00"/>
+  <text x="1080" y="568" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$2.50</text>
+  <rect x="1280" y="538" width="70" height="22" fill="#f3f3ec"/>
+
+  <text x="72" y="680" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Output</text>
+  <text x="560" y="684" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$40</text>
+  <rect x="760" y="654" width="280" height="22" fill="#d8ff00"/>
+  <text x="1080" y="684" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">$10</text>
+  <rect x="1280" y="654" width="70" height="22" fill="#f3f3ec"/>
+
+  <text x="72" y="780" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="500">Over 272K input tokens, the whole request bills at 2× input and cache, and 1.5× output.</text>
+  <text x="72" y="816" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="500">Batch 50% of Standard. Fast 2×. Ultrafast 3× through 28 Feb 2027, then 6×. Flex is not supported.</text>
+  <text x="72" y="852" fill="#6a6a62" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="500">12-hour cache write, short-context Standard: Astra $20, Sol $5. Bars compare the two models on that row only.</text>
+</svg>

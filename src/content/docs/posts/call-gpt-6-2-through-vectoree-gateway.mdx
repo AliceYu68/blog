@@ -1,0 +1,205 @@
+---
+title: "Call GPT-6.2 Astra and Sol Through the Vectoree Gateway"
+description: "One Vectoree endpoint and one project key for GPT-6.2 Astra and Sol. Use the slug search prints, or stay on vectoree/auto."
+cover: /covers/call-gpt-6-2-through-vectoree-gateway.svg
+category: solution
+tags:
+  - models
+  - gateway
+  - cli
+  - integration
+sidebar:
+  order: 3
+nav:
+  what-you-pay: "What do you pay?"
+  what-the-models-can-do: "What can the models do?"
+  call-them-through-the-gateway: "How do I call them?"
+  which-slug-gets-the-step: "Which slug gets the step?"
+  log-a-batch-before-the-queue-moves: "What should I log first?"
+faq:
+  - question: What are the OpenAI API ids for GPT-6.2?
+    answer: gpt-6.2-astra and gpt-6.2-sol. On Vectoree, use the slug that `npx @vectoree/cli ai models search astra` or `search sol` prints. If that search is empty, stay on vectoree/auto.
+  - question: Are the dollar figures in this post the Vectoree invoice?
+    answer: No. They are OpenAI's published standard card. Vectoree bills the catalog price from the organization wallet in Model Plaza.
+  - question: Can Chat Completions call tools on these models?
+    answer: No. Chat Completions fits a draft or a summary over text you already have. Tools need the Responses API. Do not send reasoning effort none. The API rejects it.
+  - question: Where does the project key live?
+    answer: On the server, as VECTOREE_API_KEY. Do not use NEXT_PUBLIC_ or put an sk-ve-v1 key in a browser bundle.
+links:
+  - label: How do I call any model through the gateway?
+    href: /posts/call-models-through-vectoree-gateway/
+  - label: What did GPT-6.1 Sol change for agents?
+    href: /posts/gpt-6-1-sol-ai-agents/
+  - label: Which model gets which step?
+    href: /posts/which-model-gets-which-step/
+---
+
+import CtaRow from '../../../components/post/CtaRow.astro';
+import PostLink from '../../../components/post/PostLink.astro';
+
+OpenAI released **GPT-6.2 Astra** and **GPT-6.2 Sol** on November 17, 2026. Astra is the frontier model for the hardest project: complex reasoning, hard coding, a website, a game, a 3D frontend, science, or any step where the score is the product. Sol is the everyday model for coding, writing, and multistep agent work. OpenAI positions it closer to Astra than GPT-6.1 Sol was.
+
+On [Vectoree](https://vectoree.ai/) that split is one endpoint and one project key. The base URL stays `https://vectoree.ai/api/v1`. You change the slug. The OpenAI API ids are `gpt-6.2-astra` and `gpt-6.2-sol`. Those strings are the ids on OpenAI's API. On Vectoree, use the slug that `npx @vectoree/cli ai models search astra` and `npx @vectoree/cli ai models search sol` print. If a search is empty, stay on `vectoree/auto`.
+
+The general pattern, one key for many models, is [Call Models Through the Vectoree Gateway](/posts/call-models-through-vectoree-gateway/). The reason a second vendor key is the wrong fix is [Why We Stopped Wiring Providers One by One](/posts/why-we-stopped-wiring-providers-one-by-one/).
+
+<CtaRow />
+
+## What you pay
+
+![OpenAI standard rates per million tokens. Astra: input $8, cached input $0.40, 30-minute cache write $10, output $40. Sol: input $2, cached input $0.10, 30-minute cache write $2.50, output $10. Sol is one quarter of Astra on each row. These are OpenAI's published rates, not a Vectoree invoice.](/posts/call-gpt-6-2-through-vectoree-gateway/01-astra-sol-rates.svg)
+
+The table is **OpenAI's published standard card**, from the [November 17 announcement](https://openai.com/index/introducing-gpt-6-2-astra-sol/) and the docs for [`gpt-6.2-astra`](https://developers.openai.com/api/docs/models/gpt-6.2-astra) and [`gpt-6.2-sol`](https://developers.openai.com/api/docs/models/gpt-6.2-sol). It is not a Vectoree price. [Model Plaza](https://vectoree.ai/) charges the catalog price from the organization wallet. On Vectoree you do not copy this card into the app.
+
+Standard rates per million tokens:
+
+| | GPT-6.2 Astra | GPT-6.2 Sol |
+| --- | --- | --- |
+| Input | $8 | $2 |
+| Cached input | $0.40 | $0.10 |
+| Cache write, 30-minute retention | $10 | $2.50 |
+| Output | $40 | $10 |
+
+On each of those four rates, Sol is one quarter of Astra. Compared with GPT-6 Astra, Astra's input and output are 20% cheaper, and cached input is 60% off. Sol's output matches GPT-6.1 Sol. For short-context Standard, a 12-hour cache write is $20 per million tokens on Astra and $5 per million on Sol.
+
+Four rules change the invoice even when the table does not:
+
+- A request over **272,000** input tokens bills the **whole** request at 2× input and cache, and 1.5× output.
+- **Batch** is 50% of Standard. **Fast** is 2× Standard.
+- **Ultrafast** is 3× Standard through February 28, 2027, and 6× starting March 1, 2027 (Pacific time).
+- **Flex** processing (`service_tier: flex`) is not supported on these models.
+
+On Vectoree there is no monthly plan. [Sign in](https://vectoree.ai/dashboard/login), then `npx @vectoree/cli login` and `link`, and the project includes **$5** of credit. An empty wallet cannot call the gateway. Spend shows up under Organization → Billing, beside the slug that spent it. [GPT-6.1 Sol](/posts/gpt-6-1-sol-ai-agents/) is the previous everyday card if you are comparing generations. How to judge the gateway before a queue moves is in [How to Evaluate an LLM Gateway](/posts/how-to-evaluate-an-llm-gateway/).
+
+## What the models can do
+
+Both models take text and images in and return text. The context window is **1,050,000** tokens. Max input is **922,000**. Max output is **128,000**. Astra's knowledge cutoff is **May 18, 2026**. Sol's is **June 1, 2026**. Paste anything newer than the cutoff into the prompt.
+
+Reasoning effort starts at `medium`. The options are `low`, `medium`, `high`, `xhigh`, and `max`. The API rejects `none`.
+
+Tools require the **Responses API**: file search, code interpreter, hosted shell, apply patch, computer use, MCP, skills, image generation, web search, and tool search. **Chat Completions** is the path for a draft or a summary over text you already have. It does not call tools on these models. OpenAI's guide is [latest model](https://developers.openai.com/api/docs/guides/latest-model).
+
+That split is the same on the gateway. Codex on Vectoree speaks the Responses wire API, so apply-patch and the rest of Codex's tools stay available. The setup is [Integrate with Codex](https://docs.vectoree.ai/codex). Server code that only needs a completion uses Chat Completions against `https://vectoree.ai/api/v1`.
+
+US and EU data residency apply to Standard, Fast, and Batch. Ultrafast is US residency only. To keep the prompt cache and the reasoning across turns, leave the prompt prefix unchanged and append the new instructions.
+
+The scores below are OpenAI's reported evals. They are not a measurement from this blog.
+
+- **Agents' Last Exam.** GPT-6.2 Astra scores 5.2 points higher than GPT-6 Astra at less than a third of the cost, and 5.5 points ahead of Claude Fable 5.2 at 5% of the cost. OpenAI notes that Fable 5.2 leaderboard results exclude nine tasks that used a fallback model.
+- **Terminal-Bench-Science 0.1.** Astra is 9 percentage points higher than GPT-6 Astra at less than one-third the cost.
+- **FrontierCode 2.0**, both at max. Sol comes within 0.5 points of Astra at about one-fifth the cost.
+- **LifeVal.** Sol outscores GPT-6 Astra at about one-seventh the cost.
+- **GDPval v2.** Astra leads, up 6.2 points from GPT-6 Astra while using 22% fewer output tokens. Sol improves 5.3 points from GPT-6.1 Sol.
+- **AA-3D Elo.** Astra 1,318. Claude Fable 5.2 1,271. Sol 1,259.
+
+[GPT-6 Astra](/posts/gpt-6-astra-developers-ai-model/) and [GPT-6 Sol and Luna](/posts/gpt-6-sol-and-luna-more-for-less/) are the earlier pair. Luna, from `ai models search`, still fits a cheap classify, extract, or short reply.
+
+Plus, Pro, Enterprise, and Edu can use both models in ChatGPT Work and Codex. On the API, Ultrafast is available for both at launch. Pro 500 gets Ultrafast on either model. Pro 200 gets Ultrafast on Sol, the first time for that plan. Enterprise and Edu need an admin to turn it on.
+
+## Call them through the gateway
+
+![One project key goes to https://vectoree.ai/api/v1. Sol is the everyday slug, Astra is the hardest slug on the same key, Luna is the cheap step from search, and vectoree/auto covers an unclassified step or an empty search.](/posts/call-gpt-6-2-through-vectoree-gateway/02-one-endpoint.svg)
+
+<PostLink href="/posts/vectoree-cli-project-key-workflow/">How do I get the project key?</PostLink>
+
+The path is the [Vectoree overview](https://docs.vectoree.ai/introduction): a local agent, one Cloud project, then models. Catalog and pricing live in the [Model Gateway docs](https://docs.vectoree.ai/models).
+
+**Open the project.** [Create the account](https://vectoree.ai/dashboard/login), install the [skill](https://vectoree.ai/SKILL.md), and link. Login plus link is the $5 credit.
+
+```bash
+npx skills add VectoreeAI/vectoree-skills
+npx @vectoree/cli login
+npx @vectoree/cli link
+npx @vectoree/cli ai models search astra
+npx @vectoree/cli ai models search sol
+```
+
+Copy the slug each search prints into `VECTOREE_ASTRA_SLUG` and `VECTOREE_SOL_SLUG`. If a search is empty, leave that variable unset. The samples below fall back to `vectoree/auto`.
+
+**Point Codex at the gateway** when the job is a repo. Menu 1 is `vectoree/auto`. Type the Astra or Sol slug when search prints it. Restore steps live in the [Codex guide](https://docs.vectoree.ai/codex).
+
+```bash
+bash <(curl -fsSL https://vectoree.ai/scripts/codex-vectoree-setup.sh)
+```
+
+```powershell
+irm https://vectoree.ai/scripts/codex-vectoree-setup.ps1 | iex
+```
+
+**Call the gateway from the server** for a draft or a summary. The key stays in the environment. It does not go in the browser bundle, and it does not use a `NEXT_PUBLIC_` name. `sk-ve-v1-your-key` in docs is a placeholder. The samples read `VECTOREE_API_KEY`.
+
+Switching Astra and Sol is a slug change. The base URL and the project key stay.
+
+```ts
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://vectoree.ai/api/v1",
+  apiKey: process.env.VECTOREE_API_KEY,
+});
+
+const sol = process.env.VECTOREE_SOL_SLUG ?? "vectoree/auto";
+// After two failures at high: process.env.VECTOREE_ASTRA_SLUG ?? "vectoree/auto"
+
+const completion = await client.chat.completions.create({
+  model: sol,
+  messages: [
+    {
+      role: "user",
+      content: "Summarize the failing test and the files in play.",
+    },
+  ],
+});
+```
+
+The same call in Python, still one key:
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://vectoree.ai/api/v1",
+    api_key=os.environ["VECTOREE_API_KEY"],
+)
+
+sol = os.environ.get("VECTOREE_SOL_SLUG", "vectoree/auto")
+# After two failures at high:
+# os.environ.get("VECTOREE_ASTRA_SLUG", "vectoree/auto")
+
+resp = client.chat.completions.create(
+    model=sol,
+    messages=[
+        {
+            "role": "user",
+            "content": "Summarize the failing test and the files in play.",
+        }
+    ],
+)
+```
+
+Chat Completions does not call tools on these models. A repo job that needs apply-patch stays on Codex pointed at the gateway. A tool-using server call uses the Responses API against the same base URL, with the slug search printed, once the catalog lists it.
+
+<PostLink href="/posts/vectoree-v1-backend-for-ai-agents/">What else sits on this project key?</PostLink>
+
+## Which slug gets the step
+
+| The step | Slug |
+| --- | --- |
+| Classify, extract, or a short reply from text already in the prompt | Luna, from `ai models search` |
+| Coding, writing, and multistep agent work you run every day | GPT-6.2 Sol, once search prints a slug |
+| That Sol task, after two failures at `high` | GPT-6.2 Astra, same project key |
+| Complex reasoning, hard coding, a website, a game, a 3D frontend, science, or any step where the score is the product | GPT-6.2 Astra, once search prints a slug |
+| A step you have not classified, or a search that came back empty | `vectoree/auto` |
+
+`gpt-6.2-astra` and `gpt-6.2-sol` are the ids on OpenAI's API. On Vectoree, use the slug search prints. The routing habit this table extends is [Which Model Gets Which Step](/posts/which-model-gets-which-step/).
+
+## Log a batch before the queue moves
+
+<PostLink href="/posts/ship-your-agent-with-vectoree/">How do I ship the agent after the slug is set?</PostLink>
+
+Create the project, then log usage rows on your own tickets before you move a production queue. Each row needs a task id, the slug, and the token counts the gateway returns. Thirty to fifty of your own tasks — one repo fix, one hard document, one multistep flow — on Sol at medium and high, with Astra only on the retries, is the comparison worth keeping.
+
+A slug change is one line in the client. Context, prompts, and evals do not move with it. That bill is [The Real Cost of Switching Models in Production](/posts/the-real-cost-of-switching-models/).
+
+Prices and access follow OpenAI's [launch note](https://openai.com/index/introducing-gpt-6-2-astra-sol/). The catalog you actually call is [docs.vectoree.ai/models](https://docs.vectoree.ai/models). The project is [vectoree.ai](https://vectoree.ai/).
