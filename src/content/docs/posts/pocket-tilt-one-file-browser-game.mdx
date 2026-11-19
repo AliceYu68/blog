@@ -1,0 +1,161 @@
+---
+title: "Pocket Tilt: A One-File Browser Maze, and the Build Log"
+description: "Three hand-built mazes, a marble, and an honest clock. Tokens and dollars were not measured."
+cover: /covers/pocket-tilt-one-file-browser-game.jpg
+category: solution
+tags:
+  - agents
+  - models
+  - gateway
+sidebar:
+  label: "Pocket Tilt"
+  order: 7
+nav:
+  "The game": "What is Pocket Tilt?"
+  "The prompt": "What prompt reproduces it?"
+  "Time and cost": "What did this run cost?"
+  "What broke": "What broke?"
+  "Run it on the gateway": "How do I run it through Vectoree?"
+faq:
+  - question: Where do I play Pocket Tilt?
+    answer: The game is at https://blog.vectoree.ai/games/pocket-tilt/. Three mazes, arrow keys or WASD, an on-screen pad, and an optional tilt button.
+  - question: What did Pocket Tilt cost to build?
+    answer: Not measured. The Vectoree gateway was not called, because no project key was in the environment.
+  - question: Are the mazes solvable?
+    answer: Yes. Each board has a path from the start to the acid pocket that does not cross a hole.
+links:
+  - label: How was Ring Glide built?
+    href: /posts/ring-glide-one-file-threejs-game/
+  - label: How do I call the gateway?
+    href: /posts/call-models-through-vectoree-gateway/
+---
+
+import CtaRow from '../../../components/post/CtaRow.astro';
+import PostLink from '../../../components/post/PostLink.astro';
+
+[awesome-fable-5.2](https://github.com/fengyiqicoder/awesome-fable-5.2) includes a wooden ball maze in three.js. Pocket Tilt keeps the play and drops the rest: roll a marble, miss the holes, reach the pocket. The boards are flat canvas, the walls are ink, and the three maps below are the whole level set. No sprites, no libraries.
+
+![Maze 1 with the marble on the top row, a hole at the lower left, and the acid pocket at the lower right.](/posts/pocket-tilt-one-file-browser-game/01-marble.jpg)
+
+<CtaRow items={[
+  { label: 'Play Pocket Tilt', href: '/games/pocket-tilt/' },
+  { label: 'Try Vectoree', href: 'https://vectoree.ai', variant: 'secondary' },
+]} />
+
+## The game
+
+[Play it at /games/pocket-tilt/](/games/pocket-tilt/). One HTML file. Canvas 2D only.
+
+Arrow keys and WASD tilt the table. The pad does the same. "Use tilt" asks for device orientation and, only after that, maps the phone's tilt onto the marble. A laptop accelerometer will not fight the keyboard unless you turn tilt on.
+
+Holes send the marble back to the start of that maze and add a fall. The acid ring is the exit. Three mazes, then a time. The best time is stored in `localStorage`.
+
+![Maze 2, after a clear of maze 1 in 4.2 seconds with no falls.](/posts/pocket-tilt-one-file-browser-game/02-second-maze.jpg)
+
+Physics is in cell units so a resize does not fling the ball. Acceleration, drag, and five collision substeps against the wall rectangles. The marble slides along a wall instead of sticking.
+
+[Ring Glide](/posts/ring-glide-one-file-threejs-game/) is the three.js flight in this set. [Moon Sling](/posts/moon-sling-one-file-browser-game/) is the gravity puzzle. Both are linked from [/games/](/games/).
+
+## The prompt
+
+This is the spec the file was built from. It includes the three boards, so a fresh run has a chance of matching this game. It was not sent to a model API in this session.
+
+```text
+Build a single-file browser game at index.html. Canvas 2D only. No libraries, no images, no copied art.
+
+Title: Pocket Tilt.
+
+Gameplay: a marble rolls through three mazes. Arrow keys and WASD tilt the table. An on-screen D-pad does the same. A "Use tilt" button requests device orientation and, only after that, maps gamma/beta to tilt. Falling in a hole resets the marble to the start of that maze and counts a fall. Reaching the acid pocket loads the next maze. After the third maze, show time and falls, and offer play again. Remember the best time in localStorage.
+
+Look: warm paper background #efe9d8, ink walls #17170f with a thin acid top edge, cream marble with an ink rim, dark holes, acid goal. A small "Built with Vectoree" link to https://vectoree.ai and a link back to /games/.
+
+Physics in cell units: acceleration, drag, several collision substeps against wall rectangles so the marble does not tunnel. Fit the maze to the viewport and keep about 196px clear at the bottom so the D-pad does not cover the goal. Arrow keys must not scroll the page.
+
+Use these maps. # wall, S start, G goal, o hole.
+
+Level 1
+########
+#S     #
+# #### #
+# #  # #
+# # ## #
+# #    #
+# #### #
+#o    G#
+########
+
+Level 2
+##########
+#S       #
+# ## ### #
+# #  # # #
+# # ## # #
+# #    # #
+# #### # #
+#o     #G#
+##########
+
+Level 3
+############
+#S         #
+# ### #### #
+# #   #  # #
+# # # # ## #
+# # #   #  #
+# # ##### o#
+# #      # #
+# ##### ## #
+#o        G#
+############
+
+One HTML file.
+```
+
+## Time and cost
+
+Pocket Tilt did not need a third pass. The clock stops at the first headless play that cleared a maze. The other games were in progress in the same sitting.
+
+| | |
+| --- | --- |
+| Wall clock | 17 min 21 s (2026-11-12 05:39:42Z to 05:57:03Z) |
+| Iterations | 2 |
+| Model | not called |
+| Prompt tokens | not measured |
+| Completion tokens | not measured |
+| Dollar cost | not measured |
+| Vectoree gateway | not used |
+
+Iteration 1 was the first file. The D-pad was bottom-right and, on a narrow window, sat on the goal. Iteration 2 reserved 196px under the board and moved the marble's play area up. The browser check on that file held Right, then Down. Maze 1 cleared in 4.2 seconds with 0 falls, and the HUD advanced to 2/3.
+
+<PostLink href="/posts/vectoree-cli-project-key-workflow/">How do I mint the project key this table is missing?</PostLink>
+
+## What broke
+
+The pad covered the exit. On a 390px-wide phone the maze is centered and the goal sits toward the lower right. A D-pad anchored to that corner lands on the last rows. Reserving the bottom of the layout fixes it. The phone shot below is maze 1 with the pad clear of the board.
+
+![Pocket Tilt on a phone. The maze sits above the pad, and the marble is in the start cell.](/posts/pocket-tilt-one-file-browser-game/03-phone.jpg)
+
+Before that browser check, a small search confirmed each map has a path from S to G that does not step on a hole. An unsolvable board would have looked like a physics bug.
+
+## Run it on the gateway
+
+Same door as the other posts. One project key, `base_url` `https://vectoree.ai/api/v1`. Look up Claude Fable 5.2 in Model Plaza. Anthropic's API id is `claude-fable-5-2`. This run did not call the gateway, so treat that string as the id to confirm, not as a recorded route.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://vectoree.ai/api/v1",
+    api_key="sk-ve-v1-your-key",
+)
+
+resp = client.chat.completions.create(
+    model="claude-fable-5-2",
+    messages=[{"role": "user", "content": prompt}],
+)
+print(resp.usage)
+```
+
+`prompt` is the spec above. Print `resp.usage` and stop. If there is no usage object, the cost is not measured.
+
+Do not put the key in the game file. After you save the HTML, roll maze 1 with Right along the top and Down the right-hand column. If the marble never reaches the pocket, the board and the collision code disagree, and the pretty walls are not the bug.

@@ -1,0 +1,133 @@
+---
+title: "Ring Glide: A One-File three.js Game After Claude Fable 5.2"
+description: "Fly a paper plane through acid rings. The prompt, the two passes, the clock, and a cost table that stays not measured."
+cover: /covers/ring-glide-one-file-threejs-game.jpg
+category: solution
+tags:
+  - agents
+  - models
+  - gateway
+sidebar:
+  label: "Ring Glide"
+  order: 6
+nav:
+  "The game": "What is Ring Glide?"
+  "The prompt": "What prompt reproduces it?"
+  "Time and cost": "What did this run cost?"
+  "What broke": "What broke?"
+  "Run it on the gateway": "How do I run it through Vectoree?"
+faq:
+  - question: Where do I play Ring Glide?
+    answer: The game is at https://blog.vectoree.ai/games/ring-glide/. It is one HTML file. Arrow keys, WASD, drag, and the on-screen pad all steer.
+  - question: What did Ring Glide cost to build?
+    answer: Token counts and dollars were not measured. No Vectoree project key was available in the environment, so the gateway was not called.
+  - question: Is this the Paper Skies demo?
+    answer: No. The gameplay idea is the same kind of 60-second ring run. The code, the plane, and the look are original.
+links:
+  - label: How do I call the gateway?
+    href: /posts/call-models-through-vectoree-gateway/
+  - label: How was Pocket Tilt built?
+    href: /posts/pocket-tilt-one-file-browser-game/
+---
+
+import CtaRow from '../../../components/post/CtaRow.astro';
+import PostLink from '../../../components/post/PostLink.astro';
+
+Claude Fable 5.2 shipped on 9 November 2026. Within a day, people were posting one-file browser games made with it. [Gamejam](https://x.com/ShipOnGamejam/status/2120184709732823356) put the same paper-plane prompt into Fable 5.1 and Fable 5.2. A [writeup of that post](https://forwhatai.com/use-case/same-paper-plane-game-prompt-in-claude-fable-5-1-and-5-2-one-try-each) says the 5.2 run took about 8.5 minutes and that both runs cost about $3.55. Those figures are Gamejam's, not ours.
+
+Ring Glide is a new game with that kind of play: steer a paper plane, thread glowing rings, stop at 60 seconds. The file, the dart, and the islands are written for this blog. Nothing was copied from Paper Skies or from [awesome-fable-5.2](https://github.com/fengyiqicoder/awesome-fable-5.2).
+
+![A cream paper plane under a row of acid rings, score 150, with dark islands to the side.](/posts/ring-glide-one-file-threejs-game/01-flight.jpg)
+
+<CtaRow items={[
+  { label: 'Play Ring Glide', href: '/games/ring-glide/' },
+  { label: 'Try Vectoree', href: 'https://vectoree.ai', variant: 'secondary' },
+]} />
+
+## The game
+
+[Play it at /games/ring-glide/](/games/ring-glide/). One `index.html`. [three.js r160.1](https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js) loads from a CDN. Everything else is in the file.
+
+You fly forward at 26 units a second. Arrows or WASD yaw and pitch. Drag on the canvas does the same thing, and so does the pad. Thirty rings sit on a gentle bend. The first one is straight ahead, so a player who does nothing still scores. A ring is 100 points, plus up to 50 for a tight pass, plus 25 if the previous ring was under four seconds ago. Collected rings dim. A chevron points at the next one.
+
+The plane is a flat `ShapeGeometry` dart, cream on top and a darker sheet underneath. Islands are boxes with an acid cap. No textures and no model files.
+
+![The same flight on a phone, with the D-pad under the plane.](/posts/ring-glide-one-file-threejs-game/02-phone.jpg)
+
+The other two games in this set are [Pocket Tilt](/posts/pocket-tilt-one-file-browser-game/) and [Moon Sling](/posts/moon-sling-one-file-browser-game/). The index is [/games/](/games/).
+
+## The prompt
+
+This is the spec the file was built from. Paste it to reproduce the game. It was not sent to a model API in this session, so there is no model completion to quote.
+
+```text
+Build a single-file browser game at index.html. No build step. Load three.js 0.160.1 from a CDN. Do not copy anyone else's art, assets, or code. All geometry is procedural.
+
+Title: Ring Glide.
+
+Gameplay: the player flies a paper plane through a dark sky of floating block islands and scores by flying through glowing rings. Arrow keys and WASD steer (yaw and pitch). A 60-second timer and the score sit in the corner. The run ends at 0. A title screen and a results screen have a keyboard-focusable start button. Mobile: an on-screen D-pad and drag-on-canvas steering. Prevent arrow keys from scrolling the page.
+
+Look: ink background #14181a with fog, acid #d8ff00 rings that dim when collected, cream paper plane built from a flat ShapeGeometry dart (not a model file), dark flat-shaded box islands with a thin acid cap. No textures, no downloaded models, no images.
+
+Course: 30 rings along +Z, a gentle sine bend in X and Y, first ring straight ahead so a player who does not steer still threads it. Speed 26 units per second. Score 100 for a ring plus a small bullseye bonus, and +25 if the previous ring was under 4 seconds ago. Soft floor and ceiling so the plane stays in the sky. Remember the best score in localStorage.
+
+HUD: score, time, rings collected, a chevron pointing at the next ring. A small "Built with Vectoree" link to https://vectoree.ai and a link back to /games/. A short triangle-wave blip on each score, safe if audio is blocked.
+
+One HTML file. Original visuals only.
+```
+
+## Time and cost
+
+The three games were built in one sitting, so the clocks overlap. Ring Glide's clock starts when the branch was created and the spec was locked, and ends when the second browser check passed.
+
+| | |
+| --- | --- |
+| Wall clock | 19 min 11 s (2026-11-12 05:39:42Z to 05:58:53Z) |
+| Iterations | 2 |
+| Model | not called |
+| Prompt tokens | not measured |
+| Completion tokens | not measured |
+| Dollar cost | not measured |
+| Vectoree gateway | not used |
+
+No project key was in the environment. Nothing was estimated to fill the blank.
+
+Iteration 1 was the first full file. A headless Chrome check (SwiftShader) clicked Fly and did not touch the keys. At about two seconds the score was 150 and the HUD read 1/30 rings. Iteration 2 removed one island that sat on the nose of the camera and filled the lower frame. The same check scored 150 again.
+
+<PostLink href="/posts/call-models-through-vectoree-gateway/">How does a measured run show up on the gateway?</PostLink>
+
+## What broke
+
+The island. One slab was placed at the center of the course, close to where the camera sits a couple of seconds in. It read as a landing strip and hid the rings. Deleting that mesh fixed the shot. Side islands stayed.
+
+three.js prints a console warning that the UMD build is deprecated. The page pins `three@0.160.1`, and that file still draws. The warning did not stop the game.
+
+Arrow keys were scrolling the page until the key handler called `preventDefault`. That was in the first file, caught by reading the controls, not by a failed play.
+
+## Run it on the gateway
+
+[Claude Fable 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2) is `claude-fable-5-2` on the Claude API. Anthropic's list price on that page is $8 per million input tokens and $40 per million output tokens. That is their price, not a bill for this post.
+
+Point a server-side OpenAI SDK at Vectoree. Confirm the catalog slug in Model Plaza before you hard-code it. This session never received a gateway response, so the slug below is the provider id to look up, not a measured Vectoree route.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://vectoree.ai/api/v1",
+    api_key="sk-ve-v1-your-key",
+)
+
+prompt = """paste the Ring Glide spec here"""
+
+resp = client.chat.completions.create(
+    model="claude-fable-5-2",
+    messages=[{"role": "user", "content": prompt}],
+)
+print(resp.choices[0].message.content)
+print(resp.usage)
+```
+
+Keep the key on the server. Read `resp.usage` for the token counts. If the field is missing, write "not measured". Do not invent a dollar figure. [Mint the key with the CLI](/posts/vectoree-cli-project-key-workflow/) and keep it out of the HTML file.
+
+Save the model's `index.html`, open it, and fly the first ring with no input. If the score stays at 0, the forward vector and the ring test disagree. Fix that before you restyle the sky.

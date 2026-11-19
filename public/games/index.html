@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3ea">
+  <title>Games — Vectoree Blog</title>
+  <meta name="description" content="Three one-file browser games on the Vectoree blog: Ring Glide, Pocket Tilt, and Moon Sling.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    :root { color-scheme: light; }
+    html, body { margin: 0; background: #f6f3ea; color: #101010; }
+    body {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      line-height: 1.5;
+    }
+    header, main, footer { width: min(880px, calc(100% - 32px)); margin: 0 auto; }
+    header { padding: 28px 0 8px; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+    a { color: #101010; font-weight: 650; text-decoration-thickness: 0.14em; text-decoration-color: #d8ff00; text-underline-offset: 0.18em; }
+    a:hover { background: #d8ff00; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; }
+    .brand img { width: 28px; height: 28px; }
+    h1 { font-size: clamp(40px, 7vw, 68px); line-height: .95; letter-spacing: -.045em; margin: 12px 0; }
+    .lede { font-size: 18px; max-width: 62ch; margin: 0 0 28px; }
+    .grid { display: grid; gap: 16px; }
+    @media (min-width: 800px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+    article {
+      background: #fffdf8;
+      border: 1px solid #101010;
+      padding: 16px 16px 14px;
+      display: flex; flex-direction: column; gap: 8px; min-height: 100%;
+    }
+    article img { width: 100%; height: 140px; object-fit: cover; border: 1px solid #101010; display: block; background: #101010; }
+    .kicker { margin: 0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    h2 { margin: 0; font-size: 28px; letter-spacing: -.03em; }
+    article p { margin: 0; }
+    .play {
+      display: inline-block; margin-top: auto; background: #101010; color: #d8ff00;
+      text-decoration: none; padding: 10px 12px; font-weight: 750;
+    }
+    .play:hover { background: #d8ff00; color: #101010; }
+    footer { padding: 28px 0 48px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/"><img src="/logo.png" alt="">Vectoree Blog</a>
+    <a href="/posts/">Posts</a>
+  </header>
+  <main>
+    <h1>Three small games.</h1>
+    <p class="lede">One HTML file each. Keyboard and touch. Original code and original drawings, made while people were shipping browser games with Claude Fable 5.2. Each card links to the build log: the prompt, the passes, the clock, and the cost.</p>
+    <div class="grid">
+      <article>
+        <img src="/covers/ring-glide-one-file-threejs-game.jpg" alt="A paper plane flying toward acid rings over dark islands.">
+        <p class="kicker">three.js · 60 seconds</p>
+        <h2>Ring Glide</h2>
+        <p>Fly a paper plane through acid rings over block islands.</p>
+        <a class="play" href="/games/ring-glide/">Play Ring Glide</a>
+        <a href="/posts/ring-glide-one-file-threejs-game/">How Ring Glide was built</a>
+      </article>
+      <article>
+        <img src="/covers/pocket-tilt-one-file-browser-game.jpg" alt="A marble in a black maze on a paper-colored board.">
+        <p class="kicker">canvas · 3 mazes</p>
+        <h2>Pocket Tilt</h2>
+        <p>Roll a marble into the acid pocket. Holes reset the maze.</p>
+        <a class="play" href="/games/pocket-tilt/">Play Pocket Tilt</a>
+        <a href="/posts/pocket-tilt-one-file-browser-game/">How Pocket Tilt was built</a>
+      </article>
+      <article>
+        <img src="/covers/moon-sling-one-file-browser-game.jpg" alt="A pebble curving past a moon toward a lit hoop.">
+        <p class="kicker">canvas · 5 shots</p>
+        <h2>Moon Sling</h2>
+        <p>Bend a pebble around a moon and through four hoops.</p>
+        <a class="play" href="/games/moon-sling/">Play Moon Sling</a>
+        <a href="/posts/moon-sling-one-file-browser-game/">How Moon Sling was built</a>
+      </article>
+    </div>
+  </main>
+  <footer>
+    <a href="https://vectoree.ai">Built with Vectoree</a>
+    · <a href="/posts/call-models-through-vectoree-gateway/">Call models through the gateway</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14181a">
+  <title>Ring Glide</title>
+  <meta name="description" content="Fly a paper plane through acid rings. A one-file three.js game.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    :root { color-scheme: dark; }
+    html, body { margin: 0; height: 100%; background: #14181a; overflow: hidden; touch-action: none; }
+    body { font-family: ui-sans-serif, system-ui, sans-serif; color: #f4efe2; }
+    #stage { position: fixed; inset: 0; }
+    #stage canvas { display: block; width: 100%; height: 100%; }
+    #vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.5) 100%);
+    }
+    a.brand, #hud, #next {
+      position: fixed; z-index: 4;
+      font-weight: 650;
+    }
+    a.brand {
+      top: 12px; left: 14px;
+      color: #d8ff00; text-decoration: none;
+      background: rgba(16,16,16,.6);
+      padding: 7px 9px; font-size: 12px; letter-spacing: .04em;
+    }
+    a.brand:hover, a.brand:focus-visible { background: #d8ff00; color: #101010; }
+    #hud { top: 12px; right: 14px; text-align: right; text-shadow: 0 1px 2px #000; }
+    #hud b { display: block; font-size: 32px; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+    #hud span { display: block; font-size: 13px; opacity: .9; }
+    #next {
+      top: 58px; right: 14px; width: 36px; height: 36px;
+      border: 1px solid rgba(216,255,0,.7); border-radius: 50%;
+      display: grid; place-items: center;
+    }
+    #next i {
+      width: 0; height: 0;
+      border-left: 6px solid transparent; border-right: 6px solid transparent;
+      border-bottom: 12px solid #d8ff00;
+      transform-origin: 50% 60%;
+    }
+    #overlay {
+      position: fixed; inset: 0; z-index: 6;
+      display: grid; place-items: center; padding: 24px;
+      background: rgba(10,12,12,.28);
+    }
+    #overlay[hidden] { display: none; }
+    .card {
+      width: min(440px, 100%);
+      background: rgba(16,16,16,.82);
+      border: 1px solid rgba(216,255,0,.45);
+      padding: 28px 26px 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    .eyebrow { margin: 0 0 8px; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; color: #d8ff00; }
+    h1 { margin: 0 0 10px; font-size: clamp(42px, 8vw, 68px); line-height: .95; letter-spacing: -.04em; }
+    .card p { margin: 0 0 10px; line-height: 1.45; }
+    .help { color: #c9c3b4; font-size: 14px; }
+    button {
+      margin-top: 8px; appearance: none; border: 0; cursor: pointer;
+      background: #d8ff00; color: #101010; font: 700 16px/1 ui-sans-serif, system-ui, sans-serif;
+      padding: 14px 22px; min-height: 48px;
+    }
+    button:focus-visible, a:focus-visible { outline: 2px solid #d8ff00; outline-offset: 3px; }
+    .links { margin-top: 14px; font-size: 14px; }
+    .links a { color: #f4efe2; }
+    .pad {
+      position: fixed; z-index: 5; left: 14px; bottom: 14px;
+      display: grid; grid-template-columns: 54px 54px 54px; grid-template-rows: 54px 54px 54px; gap: 6px;
+    }
+    .pad button {
+      margin: 0; padding: 0; min-height: 0;
+      background: rgba(16,16,16,.55); color: #d8ff00;
+      border: 1px solid rgba(216,255,0,.7); font-size: 18px;
+    }
+    .pad button.on, .pad button:active { background: #d8ff00; color: #101010; }
+    .pad .up { grid-area: 1 / 2; }
+    .pad .left { grid-area: 2 / 1; }
+    .pad .right { grid-area: 2 / 3; }
+    .pad .down { grid-area: 3 / 2; }
+    #boot {
+      position: fixed; inset: 0; z-index: 8; display: none; place-items: center; padding: 24px;
+      background: #14181a;
+    }
+    #boot.show { display: grid; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    @media (max-width: 640px) {
+      #hud b { font-size: 26px; }
+      .pad { grid-template-columns: 48px 48px 48px; grid-template-rows: 48px 48px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="stage"></div>
+  <div id="vignette"></div>
+  <a class="brand" href="https://vectoree.ai">Built with Vectoree</a>
+  <div id="hud" aria-hidden="true">
+    <b id="score">0</b>
+    <span id="meta">60s · 0/30 rings</span>
+  </div>
+  <div id="next" title="Next ring"><i id="chev"></i></div>
+  <div class="pad" id="pad">
+    <button class="up" type="button" aria-label="Pitch up">▲</button>
+    <button class="left" type="button" aria-label="Turn left">◀</button>
+    <button class="right" type="button" aria-label="Turn right">▶</button>
+    <button class="down" type="button" aria-label="Pitch down">▼</button>
+  </div>
+  <div id="overlay">
+    <div class="card">
+      <p class="eyebrow">60-second flight</p>
+      <h1 id="title">Ring Glide</h1>
+      <p id="blurb">Thread the acid rings with a paper plane. Islands are scenery. The rings are the score.</p>
+      <p class="help">Arrow keys or WASD. Drag the sky, or hold the pad. First ring is dead ahead.</p>
+      <button id="go" type="button">Fly</button>
+      <p class="links"><a href="/games/">All games</a> · <a href="/posts/ring-glide-one-file-threejs-game/">How it was built</a></p>
+    </div>
+  </div>
+  <div id="boot"><div class="card"><h1>WebGL unavailable</h1><p>This browser could not start a WebGL canvas, so Ring Glide cannot draw. Try another browser, or play <a href="/games/pocket-tilt/">Pocket Tilt</a>.</p></div></div>
+  <p id="live" class="sr" aria-live="polite"></p>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+  <script>
+    (function () {
+      const SPEED = 26;
+      const DURATION = 60;
+      const BEST_KEY = 'vectoree-ring-glide-best';
+      const stage = document.getElementById('stage');
+      const overlay = document.getElementById('overlay');
+      const go = document.getElementById('go');
+      const blurb = document.getElementById('blurb');
+      const scoreEl = document.getElementById('score');
+      const metaEl = document.getElementById('meta');
+      const chev = document.getElementById('chev');
+      const live = document.getElementById('live');
+
+      if (!window.THREE) {
+        document.getElementById('boot').classList.add('show');
+        return;
+      }
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      if (!renderer.getContext()) {
+        document.getElementById('boot').classList.add('show');
+        return;
+      }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      stage.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x14181a);
+      scene.fog = new THREE.FogExp2(0x14181a, 0.011);
+      const camera = new THREE.PerspectiveCamera(68, window.innerWidth / window.innerHeight, 0.1, 500);
+
+      scene.add(new THREE.AmbientLight(0xb7c2aa, 0.55));
+      const sun = new THREE.DirectionalLight(0xfff6df, 1.2);
+      sun.position.set(-40, 60, 20);
+      scene.add(sun);
+      const fill = new THREE.DirectionalLight(0xd8ff00, 0.28);
+      fill.position.set(30, 10, -20);
+      scene.add(fill);
+      const nextLight = new THREE.PointLight(0xd8ff00, 8, 36);
+      scene.add(nextLight);
+
+      const starPositions = [];
+      for (let i = 0; i < 240; i++) {
+        const a = (i * 47) % 240;
+        starPositions.push(((i * 97) % 400) - 200, 8 + ((i * 53) % 140), (i * 19) % 1600);
+        if (a < 0) starPositions.push(0, 0, 0);
+      }
+      const starGeo = new THREE.BufferGeometry();
+      starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+      scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+        color: 0xe7f5c8, size: 1.6, sizeAttenuation: false
+      })));
+
+      const paperMat = new THREE.MeshStandardMaterial({
+        color: 0xf4efe2, roughness: 0.72, metalness: 0, side: THREE.DoubleSide
+      });
+      const shadeMat = new THREE.MeshStandardMaterial({
+        color: 0xd5ccb6, roughness: 0.84, metalness: 0, side: THREE.DoubleSide
+      });
+      const shape = new THREE.Shape();
+      shape.moveTo(0, 1.15);
+      shape.lineTo(0.98, -0.28);
+      shape.lineTo(0.2, -0.12);
+      shape.lineTo(0.32, -0.9);
+      shape.lineTo(0, -0.55);
+      shape.lineTo(-0.32, -0.9);
+      shape.lineTo(-0.2, -0.12);
+      shape.lineTo(-0.98, -0.28);
+      shape.closePath();
+      const dart = new THREE.ShapeGeometry(shape);
+      const plane = new THREE.Group();
+      const top = new THREE.Mesh(dart, paperMat);
+      top.rotation.x = -Math.PI / 2;
+      const underside = new THREE.Mesh(dart, shadeMat);
+      underside.rotation.x = -Math.PI / 2;
+      underside.position.y = -0.025;
+      const crease = new THREE.Mesh(
+        new THREE.BoxGeometry(0.035, 0.04, 1.7),
+        new THREE.MeshStandardMaterial({ color: 0xcabb9e, roughness: 0.6 })
+      );
+      crease.position.set(0, 0.02, 0.1);
+      plane.add(top, underside, crease);
+      scene.add(plane);
+
+      const islandMat = new THREE.MeshStandardMaterial({ color: 0x1b2118, roughness: 1, flatShading: true });
+      const capMat = new THREE.MeshStandardMaterial({
+        color: 0xd8ff00, roughness: 0.62, emissive: 0x6d8200, emissiveIntensity: 0.35
+      });
+      function addIsland(x, y, z, sx, sy, sz) {
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), islandMat);
+        mesh.position.set(x, y, z);
+        const cap = new THREE.Mesh(new THREE.BoxGeometry(sx * 0.88, 0.16, sz * 0.88), capMat);
+        cap.position.y = sy / 2 + 0.02;
+        mesh.add(cap);
+        scene.add(mesh);
+      }
+
+      const rings = [];
+      const up = new THREE.Vector3(0, 0, 1);
+      for (let i = 0; i < 30; i++) {
+        const z = 40 + i * 46;
+        const x = i === 0 ? 0 : Math.sin(i * 0.85) * 14;
+        const y = 8 + Math.sin(i * 0.5) * 4;
+        const radius = i < 4 ? 4.6 : 3.7;
+        const prev = i === 0 ? new THREE.Vector3(0, y, 0) : new THREE.Vector3(
+          i === 1 ? 0 : Math.sin((i - 1) * 0.85) * 14,
+          8 + Math.sin((i - 1) * 0.5) * 4,
+          40 + (i - 1) * 46
+        );
+        const dir = new THREE.Vector3(x, y, z).sub(prev).normalize();
+        const mesh = new THREE.Mesh(
+          new THREE.TorusGeometry(radius, 0.14, 8, 28),
+          new THREE.MeshStandardMaterial({
+            color: 0xd8ff00, emissive: 0xd8ff00, emissiveIntensity: 0.9, roughness: 0.32
+          })
+        );
+        mesh.position.set(x, y, z);
+        mesh.quaternion.setFromUnitVectors(up, dir);
+        mesh.userData = { normal: dir.clone(), radius: radius, got: false, prevAlong: -1e9 };
+        scene.add(mesh);
+        rings.push(mesh);
+        addIsland(x + 16, y - 6, z - 4, 8, 3.2, 6);
+        if (i % 2 === 0) addIsland(x - 18, y - 8, z + 8, 6.5, 4.2, 5.5);
+      }
+      addIsland(-14, 3, 18, 6, 2.4, 5);
+      addIsland(16, 2, 28, 5, 2.2, 4.5);
+
+      const pos = new THREE.Vector3(0, 8, 0);
+      const forward = new THREE.Vector3();
+      const camOffset = new THREE.Vector3();
+      const look = new THREE.Vector3();
+      const rel = new THREE.Vector3();
+      const key = { x: 0, y: 0 };
+      const pad = { x: 0, y: 0 };
+      const drag = { x: 0, y: 0, active: false, px: 0, py: 0 };
+      let wantX = 0;
+      let wantY = 0;
+      let steerX = 0;
+      let steerY = 0;
+      let yaw = 0;
+      let pitch = 0;
+      let state = 'title';
+      let score = 0;
+      let left = DURATION;
+      let got = 0;
+      let lastRingAt = -10;
+      let playT = 0;
+      let audio;
+      const held = { l: false, r: false, u: false, d: false };
+
+      function readBest() {
+        try { return Number(localStorage.getItem(BEST_KEY) || 0); } catch (e) { return 0; }
+      }
+      function writeBest(n) {
+        try { localStorage.setItem(BEST_KEY, String(n)); } catch (e) { /* private mode */ }
+      }
+      function tone(freq) {
+        try {
+          audio = audio || new AudioContext();
+          if (audio.state === 'suspended') audio.resume();
+          const o = audio.createOscillator();
+          const g = audio.createGain();
+          o.type = 'triangle';
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.045, audio.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.12);
+          o.connect(g); g.connect(audio.destination);
+          o.start();
+          o.stop(audio.currentTime + 0.13);
+        } catch (e) { /* audio is optional */ }
+      }
+      function syncKeys() {
+        key.x = (held.r ? 1 : 0) - (held.l ? 1 : 0);
+        key.y = (held.u ? 1 : 0) - (held.d ? 1 : 0);
+      }
+      function axes() {
+        const dx = drag.active ? drag.x : 0;
+        const dy = drag.active ? drag.y : 0;
+        wantX = Math.max(-1, Math.min(1, key.x + pad.x + dx));
+        wantY = Math.max(-1, Math.min(1, key.y + pad.y + dy));
+      }
+      function paintHud() {
+        scoreEl.textContent = String(score);
+        metaEl.textContent = Math.ceil(Math.max(0, left)) + 's · ' + got + '/' + rings.length + ' rings';
+      }
+      function resetRings() {
+        rings.forEach(function (ring) {
+          ring.userData.got = false;
+          ring.userData.prevAlong = -1e9;
+          ring.material.color.setHex(0xd8ff00);
+          ring.material.emissive.setHex(0xd8ff00);
+          ring.material.emissiveIntensity = 0.9;
+        });
+      }
+      function showCard(playing) {
+        overlay.hidden = playing;
+        if (!playing) go.focus();
+      }
+      function finish(cleared) {
+        state = 'done';
+        const best = readBest();
+        if (score > best) writeBest(score);
+        const bestNow = Math.max(best, score);
+        blurb.textContent = (cleared ? 'Clear sky. ' : 'Time. ') +
+          got + ' of ' + rings.length + ' rings. Score ' + score + '. Best ' + bestNow + '.';
+        go.textContent = 'Fly again';
+        live.textContent = blurb.textContent;
+        showCard(false);
+        tone(420);
+      }
+      function start() {
+        pos.set(0, 8, 0);
+        yaw = 0; pitch = 0; steerX = 0; steerY = 0;
+        score = 0; got = 0; left = DURATION; playT = 0; lastRingAt = -10;
+        resetRings();
+        paintHud();
+        state = 'play';
+        go.textContent = 'Fly';
+        blurb.textContent = 'Thread the acid rings with a paper plane. Islands are scenery. The rings are the score.';
+        showCard(true);
+        try {
+          audio = audio || new AudioContext();
+          if (audio.state === 'suspended') audio.resume();
+        } catch (e) { /* ignore */ }
+        live.textContent = 'Flying. Sixty seconds.';
+      }
+
+      go.addEventListener('click', start);
+      window.addEventListener('keydown', function (e) {
+        const map = { ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r', ArrowUp: 'u', KeyW: 'u', ArrowDown: 'd', KeyS: 'd' };
+        if (map[e.code]) {
+          held[map[e.code]] = true;
+          syncKeys();
+          e.preventDefault();
+        }
+        if ((e.code === 'Space' || e.code === 'Enter') && state !== 'play') {
+          e.preventDefault();
+          start();
+        }
+        if (e.code === 'Space') e.preventDefault();
+      });
+      window.addEventListener('keyup', function (e) {
+        const map = { ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r', ArrowUp: 'u', KeyW: 'u', ArrowDown: 'd', KeyS: 'd' };
+        if (map[e.code]) {
+          held[map[e.code]] = false;
+          syncKeys();
+          e.preventDefault();
+        }
+      });
+      window.addEventListener('blur', function () {
+        held.l = held.r = held.u = held.d = false;
+        syncKeys();
+        drag.active = false;
+        pad.x = 0; pad.y = 0;
+      });
+
+      document.querySelectorAll('.pad button').forEach(function (btn) {
+        const dir = btn.classList.contains('left') ? ['x', -1]
+          : btn.classList.contains('right') ? ['x', 1]
+          : btn.classList.contains('up') ? ['y', 1]
+          : ['y', -1];
+        btn.addEventListener('pointerdown', function (e) {
+          e.preventDefault();
+          btn.setPointerCapture(e.pointerId);
+          pad[dir[0]] = dir[1];
+          btn.classList.add('on');
+        });
+        function clear(e) {
+          if (e) e.preventDefault();
+          if (pad[dir[0]] === dir[1]) pad[dir[0]] = 0;
+          btn.classList.remove('on');
+        }
+        btn.addEventListener('pointerup', clear);
+        btn.addEventListener('pointercancel', clear);
+      });
+
+      renderer.domElement.addEventListener('pointerdown', function (e) {
+        if (state !== 'play') return;
+        if (e.target !== renderer.domElement) return;
+        drag.active = true;
+        drag.px = e.clientX;
+        drag.py = e.clientY;
+        renderer.domElement.setPointerCapture(e.pointerId);
+      });
+      renderer.domElement.addEventListener('pointermove', function (e) {
+        if (!drag.active) return;
+        drag.x = Math.max(-1, Math.min(1, (e.clientX - drag.px) / 90));
+        drag.y = Math.max(-1, Math.min(1, -(e.clientY - drag.py) / 90));
+      });
+      function endDrag() {
+        drag.active = false;
+        drag.x = 0;
+        drag.y = 0;
+      }
+      renderer.domElement.addEventListener('pointerup', endDrag);
+      renderer.domElement.addEventListener('pointercancel', endDrag);
+
+      function placeCraft() {
+        const roll = -steerX * 0.6;
+        plane.rotation.order = 'YXZ';
+        plane.rotation.set(pitch, yaw, roll);
+        plane.position.copy(pos);
+        forward.set(0, 0, 1).applyQuaternion(plane.quaternion);
+        camOffset.set(0, 1.65, -7.1).applyQuaternion(plane.quaternion);
+        camera.position.copy(pos).add(camOffset);
+        look.copy(pos).addScaledVector(forward, 16);
+        look.y += 0.25;
+        camera.lookAt(look);
+      }
+
+      function step(dt) {
+        axes();
+        steerX += (wantX - steerX) * Math.min(1, dt * 6);
+        steerY += (wantY - steerY) * Math.min(1, dt * 6);
+        yaw += steerX * 1.25 * dt;
+        pitch += steerY * 0.95 * dt;
+        pitch = Math.max(-0.62, Math.min(0.7, pitch));
+        forward.set(0, 0, 1);
+        const euler = new THREE.Euler(pitch, yaw, -steerX * 0.6, 'YXZ');
+        forward.applyEuler(euler);
+        pos.addScaledVector(forward, SPEED * dt);
+        if (pos.y < 1.4) pos.y = 1.4;
+        if (pos.y > 36) pos.y = 36;
+        placeCraft();
+        left -= dt;
+        playT += dt;
+        let next = null;
+        for (let i = 0; i < rings.length; i++) {
+          const ring = rings[i];
+          rel.copy(pos).sub(ring.position);
+          const along = rel.dot(ring.userData.normal);
+          rel.addScaledVector(ring.userData.normal, -along);
+          const lateral = rel.length();
+          if (!ring.userData.got && ring.userData.prevAlong < 0 && along >= 0 && lateral < ring.userData.radius * 0.92) {
+            ring.userData.got = true;
+            got += 1;
+            let add = 100 + Math.round((1 - lateral / ring.userData.radius) * 50);
+            if (playT - lastRingAt < 4) add += 25;
+            lastRingAt = playT;
+            score += add;
+            ring.material.emissiveIntensity = 0.08;
+            ring.material.color.setHex(0x445022);
+            ring.material.emissive.setHex(0x1c240c);
+            tone(620 + got * 18);
+            live.textContent = 'Ring ' + got + '. Score ' + score + '.';
+          }
+          ring.userData.prevAlong = along;
+          if (!ring.userData.got && !next) next = ring;
+        }
+        if (next) {
+          nextLight.position.copy(next.position);
+          nextLight.intensity = 10;
+          rel.copy(next.position).sub(pos);
+          const inv = plane.quaternion.clone().invert();
+          rel.applyQuaternion(inv);
+          const ang = Math.atan2(rel.x, rel.z);
+          chev.style.transform = 'rotate(' + ang + 'rad)';
+        } else {
+          nextLight.intensity = 0;
+        }
+        paintHud();
+        if (got === rings.length) finish(true);
+        else if (left <= 0) finish(false);
+      }
+
+      placeCraft();
+      paintHud();
+      go.focus();
+
+      let last = performance.now();
+      function frame(now) {
+        requestAnimationFrame(frame);
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        if (state === 'play') step(dt);
+        renderer.render(scene, camera);
+      }
+      requestAnimationFrame(frame);
+
+      window.addEventListener('resize', function () {
+        camera.aspect = window.innerWidth / Math.max(1, window.innerHeight);
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    })();
+  </script>
+</body>
+</html>
