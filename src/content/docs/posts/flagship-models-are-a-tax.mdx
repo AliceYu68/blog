@@ -1,0 +1,205 @@
+---
+title: "Flagship Models Are a Tax: Sol Is Enough for Most Agent Steps"
+description: "GPT-6.2 Astra is four times GPT-6.2 Sol on OpenAI's published card. Price one hypothetical agent ticket, then make the flagship an escalation instead of the default."
+cover: /covers/flagship-models-are-a-tax.svg
+category: challenge
+tags:
+  - models
+  - gateway
+  - agents
+  - integration
+sidebar:
+  label: "Flagship Models Are a Tax"
+  order: 12
+nav:
+  "The default that is costing you": "What is the default costing you?"
+  "Do the math on one hypothetical run": "What does one run cost?"
+  "Which steps deserve the flagship": "Which steps deserve Astra?"
+  "The strongest case against this post": "When is this post wrong?"
+  "Try the split without a new stack": "How do I try the split?"
+  "Is your flagship spend a tax?": "Is your flagship spend a tax?"
+faq:
+  - question: What is the flagship tax?
+    answer: Paying GPT-6.2 Astra's published standard rates for steps OpenAI positions GPT-6.2 Sol to handle. On that card Astra is $8 input and $40 output per million tokens, and Sol is $2 and $10. Cached input and the 30-minute cache write are four times as well.
+  - question: Is the $1.840 figure a measured bill?
+    answer: No. It applies OpenAI's standard card to a hypothetical 20-step ticket with every token count stated in the post. It is not a Vectoree invoice and not a customer trace. Vectoree bills the catalog price from the organization wallet. Your number comes from your own logs.
+  - question: When should a step stay on Astra?
+    answer: When the step is the plan, the score is the product, Sol has already failed twice at high effort, or a wrong answer costs more than the token gap. Payments, permission changes, and anything that leaves the company still need a person.
+  - question: How do I try Sol without a second provider key?
+    answer: One Vectoree project key and the base URL https://vectoree.ai/api/v1. Use the slug that `npx @vectoree/cli ai models search sol` prints, log task id, slug, and tokens on your own tickets, and call the Astra slug after two Sol failures at high. If search is empty, stay on vectoree/auto.
+links:
+  - label: Which model gets which step?
+    href: /posts/which-model-gets-which-step/
+  - label: How do I call GPT-6.2 through the gateway?
+    href: /posts/call-gpt-6-2-through-vectoree-gateway/
+  - label: How do I call any model through one gateway?
+    href: /posts/call-models-through-vectoree-gateway/
+---
+
+import CtaRow from '../../../components/post/CtaRow.astro';
+import PostLink from '../../../components/post/PostLink.astro';
+
+The flagship is the escalation. Sol is the default. Most agent loops have that backwards, and the invoice is the confession.
+
+OpenAI's published standard card prices **GPT-6.2 Astra** at **$8** per million input tokens and **$40** per million output tokens. **GPT-6.2 Sol** is **$2** and **$10**. Cached input is $0.40 against $0.10. A 30-minute cache write is $10 against $2.50. Every row is four times. A loop that pins `gpt-6.2-astra` on classify, extract, format, and tool-call glue is paying the flagship rate for work OpenAI already split onto the everyday model.
+
+There is no measured "90 percent of steps" in this post. There is a rate card, a hypothetical ticket with every token count written down, and your logs. If the loop really is twenty hard judgments, keep Astra. If it is not, the default is a tax.
+
+<CtaRow />
+
+## The default that is costing you
+
+The default has an engineering story. One slug. The strongest model. No router to be wrong. A misroute feels like an incident. A correct cheap route is invisible, so the config stays on the flagship and finance meets the card later.
+
+OpenAI did not ask for that. On November 17, 2026 it shipped `gpt-6.2-astra` and `gpt-6.2-sol`. The [launch note](https://openai.com/index/introducing-gpt-6-2-astra-sol/) calls Astra the frontier model for the hardest projects and Sol the efficient model for everyday work. The [Sol docs](https://developers.openai.com/api/docs/models/gpt-6.2-sol) call it the go-to model from coding to agents at scale, and OpenAI says many of its own employees already use it as their default.
+
+The gap is arithmetic, not a benchmark.
+
+| Per million tokens, standard | GPT-6.2 Astra | GPT-6.2 Sol |
+| --- | --- | --- |
+| Input | $8 | $2 |
+| Cached input | $0.40 | $0.10 |
+| Cache write, 30-minute retention | $10 | $2.50 |
+| Output | $40 | $10 |
+
+Sources are the launch note and the docs for [`gpt-6.2-astra`](https://developers.openai.com/api/docs/models/gpt-6.2-astra) and [`gpt-6.2-sol`](https://developers.openai.com/api/docs/models/gpt-6.2-sol). [Model Plaza](https://vectoree.ai/) charges the catalog price from the organization wallet, which [the gateway post](/posts/call-gpt-6-2-through-vectoree-gateway/) separates from this card. This table is not your invoice.
+
+Four times is the tax on tokens that deserved Sol's rate. Tokens that stay on Astra still cost Astra's price. A hard-reasoning loop should stay expensive. A glue loop should not. [Which Model Gets Which Step](/posts/which-model-gets-which-step/) is the card for assigning steps. This post is why the flagship cannot be every row of it.
+
+## Do the math on one hypothetical run
+
+Every token count below is a round number you can recompute. Same counts on both models, uncached Standard, each call under the 272,000-token threshold. Not a trace.
+
+```text
+cost = (input_tokens / 1_000_000) × input_price
+     + (output_tokens / 1_000_000) × output_price
+```
+
+One ticket. Twenty calls.
+
+| Step | Calls | Input each | Output each | What it stands in for | Astra each | Sol each |
+| --- | --- | --- | --- | --- | --- | --- |
+| Glue | 12 | 4,000 | 300 | Classify, extract a field, format into a schema, choose a tool | $0.044 | $0.011 |
+| Draft | 6 | 12,000 | 800 | Read a chunk, draft a scoped change, summarize a tool result | $0.128 | $0.032 |
+| Hard | 2 | 24,000 | 2,000 | The plan, or a judgment you already know is the product | $0.272 | $0.068 |
+
+Glue on Astra is `4,000 / 1,000,000 × 8 + 300 / 1,000,000 × 40 = 0.032 + 0.012 = 0.044`. Glue on Sol is `0.008 + 0.003 = 0.011`. The other cells are the same formula.
+
+| Route | Glue | Draft | Hard | One ticket |
+| --- | --- | --- | --- | --- |
+| All Astra | 12 × $0.044 = $0.528 | 6 × $0.128 = $0.768 | 2 × $0.272 = $0.544 | **$1.840** |
+| Sol, Astra only on the hard steps | 12 × $0.011 = $0.132 | 6 × $0.032 = $0.192 | 2 × $0.272 = $0.544 | **$0.868** |
+| All Sol | 12 × $0.011 = $0.132 | 6 × $0.032 = $0.192 | 2 × $0.068 = $0.136 | **$0.460** |
+
+Cross-check: 168,000 input tokens and 12,400 output tokens. All Astra is `168,000 / 1,000,000 × 8 + 12,400 / 1,000,000 × 40 = 1.840`. All Sol is `0.460`, exactly a quarter, because every token moved. The split prices 120,000 input and 8,400 output at Sol and the rest at Astra, and lands on `0.868`.
+
+![Hypothetical bills for one 20-step ticket at OpenAI standard rates, same token counts, uncached, under 272K input. All Astra $1.840. Sol on glue and draft, Astra on two hard steps, $0.868. All Sol $0.460. Not a measured trace.](/posts/flagship-models-are-a-tax/01-hypothetical-bill.svg)
+
+The flagship default costs **$0.972** more than the split on this made-up ticket. `$1.840 / $0.868` is about **2.1×**, not 4×. The 4× lives only on tokens you move. All Sol at $0.460 is the floor, and the wrong target, because the hard steps exist. A thousand copies of this same ticket would be **$1,840** against **$868**. That is multiplication, not a team.
+
+Cross out 12, 6, and 2, and cross out the token counts. Write your medians. My hypothesis, for you to kill, is that glue and ordinary drafts outnumber the steps where the score is the product. Eighteen and two is a sketch of that hypothesis, not a finding. An inverted count means the split saves little.
+
+Four things the illustration leaves out:
+
+- **Cache.** Cached input is $0.40 against $0.10, and a 30-minute cache write is $10 against $2.50. Price the cached share at the cached rate and the fresh tail at the input rate.
+- **Long context.** Over 272,000 input tokens, the whole request bills at 2× input and cache, and 1.5× output. The same fat prompt is still four times on Astra. Send fewer tokens first.
+- **Speed tiers.** Batch is half of Standard. Fast is 2×. Ultrafast is 3× through February 28, 2027, and 6× from March 1, 2027 (Pacific time). They scale the rate you chose. They do not close the gap. Ultrafast makes a lazy Astra default more expensive.
+- **Tools.** Tools need the Responses API. This prices the text card only. If your glue call is fatter than 4,000 in and 300 out, use the counts the gateway returns.
+
+## Which steps deserve the flagship
+
+Astra earns the card when the step is why you called a model.
+
+- The plan, when the goal is ambiguous and the next ten steps depend on it.
+- A judgment where the score is the product. The research result. The deliverable a person will ship as the artifact.
+- A step that already failed twice on Sol at high. Escalation is the flagship's job.
+- Anything irreversible. A payment, a permission change, a customer send, a protected merge. A person still approves these. Neither model retires that person.
+
+Sol is the right first call for the ordinary machinery.
+
+- Classify the ticket.
+- Extract a field already in the text.
+- Format a reply into a schema you specified.
+- Choose a tool when the list is short and the instruction is explicit.
+- Summarize a tool result for the next step.
+- A scoped edit with a repro. OpenAI put everyday coding on Sol. If your repo disagrees, escalate that step and leave the classifier alone.
+
+![The default sends classify, extract, format, tool glue, draft, and the plan to GPT-6.2 Astra. The escalation sends glue and draft to Sol, the plan to Astra, and escalates after two Sol failures at high on the same task id.](/posts/flagship-models-are-a-tax/02-default-versus-escalation.svg)
+
+A cheaper classify row from search can take a pure label, at that row's own price.
+
+One OpenAI figure, so it is not mistaken for the rate card. On Cognition's FrontierCode 2.0, the [launch note](https://openai.com/index/introducing-gpt-6-2-astra-sol/) reports Sol within 0.5 points of Astra at about one-fifth the cost per task, both at max. That cost-per-task ratio can move with tokens spent. The published prices are four times, not five. It is their eval, not permission to put an irreversible step on Sol.
+
+## The strongest case against this post
+
+The sharpest objection is that Sol fails and the savings were a spreadsheet. The rule on this blog is two failures at high, then Astra, same task id: two Sol calls and one Astra call. Counts are held flat, which flatters the cheap route. A retry that pastes the failure, or a higher effort that spends more tokens, costs more. Use logged counts before you declare a win.
+
+A glue step that walks the whole path costs `$0.011 + $0.011 + $0.044 = $0.066`. Astra alone is `$0.044`. The extra above one successful Sol call is `$0.055`. The illustration's gap is `$0.972`. You erase it at `$0.972 / $0.055`, about **18** full-path glue failures. The ticket has 12 glue steps. Glue retries do not rescue the flagship default unless Sol cannot classify, in which case you were wrong to call the step glue.
+
+Drafts can erase it. A full-path draft failure adds `$0.032 + $0.128 = $0.160`. `$0.972 / $0.160` is about **6**, and there are six draft steps. If every draft walks that path, the token gap is gone and six bad drafts came first. Three such failures add `$0.480` and leave `$0.492`, which is irrelevant if a draft reached a user. When draft retries climb, move drafts to Astra and leave glue on Sol.
+
+A wrong customer email, a bad merge, a payment, a permission change. If one miss costs more than the token gap, the flagship or a person is the cheaper system. I am wrong wherever you cannot tolerate a miss.
+
+Engineering time is often the right objection. On one OpenAI-compatible endpoint the change is a slug and a log line. Otherwise, make that call before you build a router. Ten copies a day of this ticket are `$9.72`. Fifty a day are `$48.60`, and thirty such days are `$1,458` (`30 × 50 × 0.972`). Still hypothetical. Your test is `(tickets per day) × (your all-Astra cost − your split cost)`. Below a day of engineering, keep one slug. Convenience is rational at low volume, and stops being rational when the loop is the product.
+
+Astra might be terser, so four times the rate is not four times the bill. Unmeasured here. Glue money is mostly the prompt: `$0.032` input and `$0.012` output at Astra's rates. The same prompt keeps the input ratio at four. Output falling to zero still leaves `$0.032` against Sol's `$0.011`. A Sol prompt stuffed with extra examples is a different call. Add those tokens and let the formula move the step.
+
+I am wrong, and you will see it, when the hard steps are the loop, when Sol's failure rate eats the gap, when one miss costs more than the token delta, or when the agent is still a demo. I am not wrong that the published Astra prices are four times Sol's.
+
+A new slug does not replay the plan. [The Real Cost of Switching Models in Production](/posts/the-real-cost-of-switching-models/) is that bill. Send the ticket, the failure, and the files again. That resend can dwarf the `$0.272` hard step.
+
+## Try the split without a new stack
+
+One project key, one base URL, a different slug. The general pattern is [Call Models Through the Vectoree Gateway](/posts/call-models-through-vectoree-gateway/). GPT-6.2 specifics, including Codex, are in [Call GPT-6.2 Astra and Sol Through the Vectoree Gateway](/posts/call-gpt-6-2-through-vectoree-gateway/).
+
+<PostLink href="/posts/vectoree-cli-project-key-workflow/">How do I mint the project key?</PostLink>
+
+[Create the account](https://vectoree.ai/dashboard/login), then login and link. That path includes **$5** of project credit. An empty wallet cannot call the gateway. Keep the key in `VECTOREE_API_KEY` on the server. It does not belong in a browser bundle or under a `NEXT_PUBLIC_` name.
+
+```bash
+npx @vectoree/cli login
+npx @vectoree/cli link
+npx @vectoree/cli ai models search sol
+npx @vectoree/cli ai models search astra
+```
+
+Copy the slug search prints. An empty search stays on `vectoree/auto`. The OpenAI ids are not the Vectoree slug.
+
+```ts
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://vectoree.ai/api/v1",
+  apiKey: process.env.VECTOREE_API_KEY,
+});
+
+const sol = process.env.VECTOREE_SOL_SLUG ?? "vectoree/auto";
+const astra = process.env.VECTOREE_ASTRA_SLUG ?? "vectoree/auto";
+
+// Glue and draft: sol. Plan, or the score is the product: astra.
+// After two failures at high, call again with astra and the same task id.
+const model = step.needsFlagship || step.solFailures >= 2 ? astra : sol;
+
+const completion = await client.chat.completions.create({
+  model,
+  messages: [{ role: "user", content: step.prompt }],
+});
+
+// On your ticket: task id, slug, prompt tokens, completion tokens.
+```
+
+Chat Completions will not call tools on these models. Tool use goes through the Responses API at the same base URL. A repo job that needs apply-patch stays on Codex pointed at the gateway. The setup is [Integrate with Codex](https://docs.vectoree.ai/codex).
+
+Log thirty to fifty of your own tasks before a queue moves. One repo fix, one hard document, one multistep flow. Record task id, slug, prompt tokens, completion tokens, and whether it succeeded without a retry. Spend shows up under Organization → Billing. If Sol's drafts keep failing, move those steps and keep the glue.
+
+<PostLink href="/posts/which-model-gets-which-step/">Where does this split sit on the routing card?</PostLink>
+
+<CtaRow />
+
+## Is your flagship spend a tax?
+
+Count the last twenty model calls in the agent you actually run. How many were classify, extract, format, or tool-call glue, and how many of those ran on the flagship?
+
+If most of them ran on the flagship, you are paying for a decision you never made. Astra is the right model when the step earns it, and an expensive habit when it does not. If almost none of them did, you are the exception. Say so with the trace.
+
+Post the count to [@VectoreeAI](https://x.com/VectoreeAI). Flagship as the default, because your steps justify it, or flagship as the escalation, because ordinary steps were never worth $40 per million output tokens. Pick a side. Bring tokens.
