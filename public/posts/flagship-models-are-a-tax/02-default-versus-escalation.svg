@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img">
+  <title>Default versus escalation</title>
+  <desc>Left: every agent step, including classify, extract, format, tool glue, draft, and plan, goes to GPT-6.2 Astra. Right: glue and draft go to GPT-6.2 Sol; the plan and any step where the score is the product go to Astra; Sol escalates to Astra after two failures at high, on the same task id.</desc>
+  <rect width="1600" height="900" fill="#101010"/>
+  <text x="72" y="72" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2.6">SAME PROJECT KEY · YOU CHANGE THE SLUG</text>
+  <text x="72" y="136" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">Default versus escalation</text>
+
+  <rect x="72" y="180" width="700" height="640" fill="#161616"/>
+  <text x="104" y="232" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2.2">THE DEFAULT</text>
+  <text x="104" y="278" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="700">One slug. Every step.</text>
+
+  <rect x="104" y="312" width="250" height="52" fill="#2a2a2a"/>
+  <text x="124" y="346" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Classify</text>
+  <rect x="370" y="312" width="250" height="52" fill="#2a2a2a"/>
+  <text x="390" y="346" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Extract</text>
+  <rect x="104" y="380" width="250" height="52" fill="#2a2a2a"/>
+  <text x="124" y="414" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Format</text>
+  <rect x="370" y="380" width="250" height="52" fill="#2a2a2a"/>
+  <text x="390" y="414" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Tool glue</text>
+  <rect x="104" y="448" width="250" height="52" fill="#2a2a2a"/>
+  <text x="124" y="482" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Draft</text>
+  <rect x="370" y="448" width="250" height="52" fill="#2a2a2a"/>
+  <text x="390" y="482" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Plan</text>
+
+  <line x1="360" y1="512" x2="360" y2="560" stroke="#d8ff00" stroke-width="4"/>
+  <polygon points="360,576 348,552 372,552" fill="#d8ff00"/>
+
+  <rect x="104" y="580" width="516" height="140" fill="#d8ff00"/>
+  <text x="128" y="628" fill="#101010" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="1.8">ALL OF IT</text>
+  <text x="128" y="674" fill="#101010" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">gpt-6.2-astra</text>
+  <text x="128" y="706" fill="#3d4d00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">OpenAI id. On Vectoree, the slug search prints.</text>
+
+  <rect x="828" y="180" width="700" height="640" fill="#161616" stroke="#d8ff00" stroke-width="4"/>
+  <text x="860" y="232" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2.2">THE ESCALATION</text>
+  <text x="860" y="278" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="700">Sol unless the step earns Astra.</text>
+
+  <rect x="860" y="312" width="636" height="88" fill="#2a2a2a"/>
+  <text x="884" y="348" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.4">GLUE AND DRAFT</text>
+  <text x="884" y="380" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Classify, extract, format, tool glue, draft → Sol</text>
+
+  <rect x="860" y="416" width="636" height="88" fill="#2a2a2a"/>
+  <text x="884" y="452" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.4">FLAGSHIP</text>
+  <text x="884" y="484" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Plan, or the score is the product → Astra</text>
+
+  <rect x="860" y="528" width="636" height="120" fill="#d8ff00"/>
+  <text x="884" y="572" fill="#101010" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.4">AFTER TWO FAILURES AT HIGH</text>
+  <text x="884" y="610" fill="#101010" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="26" font-weight="700">Same task id. Sol, then Astra.</text>
+  <text x="884" y="642" fill="#3d4d00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Log task id, slug, and tokens on your ticket.</text>
+
+  <text x="860" y="780" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="500">One key. Base URL stays https://vectoree.ai/api/v1.</text>
+</svg>
