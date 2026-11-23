@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img">
+  <title>Flagship models are a tax</title>
+  <desc>Cover. OpenAI's published standard card is four times higher on GPT-6.2 Astra than on GPT-6.2 Sol for input, cached input, cache write, and output. Astra is $8 in and $40 out. Sol is $2 in and $10 out, per million tokens. The flagship is the escalation, not the default.</desc>
+  <defs>
+    <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="1.2" cy="1.2" r="1.15" fill="#d8ff00"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#101010"/>
+  <polygon points="1180,0 1600,0 1600,320" fill="url(#dots)"/>
+  <rect x="0" y="760" width="1600" height="140" fill="#161616"/>
+
+  <text x="80" y="88" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3">CHALLENGE</text>
+  <text x="1520" y="88" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2" text-anchor="end">THE DEFAULT IS THE BILL</text>
+
+  <text x="80" y="210" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="78" font-weight="700">Flagship models</text>
+  <text x="80" y="300" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="78" font-weight="700">are a tax.</text>
+  <text x="80" y="368" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="500">Sol for the ordinary step. Astra when the step earns it.</text>
+
+  <rect x="80" y="420" width="680" height="300" fill="#d8ff00"/>
+  <text x="116" y="500" fill="#101010" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2.4">PUBLISHED STANDARD CARD</text>
+  <text x="116" y="610" fill="#101010" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="140" font-weight="700">4×</text>
+  <text x="116" y="674" fill="#3d4d00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="600">Input, cached input, cache write, output</text>
+
+  <rect x="840" y="420" width="680" height="300" fill="#161616" stroke="#d8ff00" stroke-width="4"/>
+  <text x="876" y="478" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2">ASTRA · ESCALATION</text>
+  <text x="876" y="540" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="52" font-weight="700">$8 in · $40 out</text>
+  <text x="876" y="610" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2">SOL · EVERYDAY DEFAULT</text>
+  <text x="876" y="672" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="52" font-weight="700">$2 in · $10 out</text>
+
+  <text x="80" y="818" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="500">OpenAI’s card, per million tokens. Not a Vectoree invoice. Not a measured agent trace.</text>
+  <text x="80" y="858" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">Hypothetical ticket inside: $1.840 all Astra · $0.868 split · $0.460 all Sol</text>
+</svg>

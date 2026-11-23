@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img">
+  <title>Hypothetical 20-step ticket, three bills</title>
+  <desc>Worked example, not a measurement. Same stated token counts, OpenAI standard rates, uncached, under 272K input. All Astra $1.840. Sol on 12 glue steps and 6 draft steps, Astra on 2 hard steps: $0.868. All Sol $0.460. Bar lengths follow those totals. Glue, draft, and hard segments are labelled.</desc>
+  <rect width="1600" height="900" fill="#101010"/>
+  <text x="72" y="72" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2.6">HYPOTHETICAL · AUTHOR’S TOKEN COUNTS · NOT A TRACE</text>
+  <text x="72" y="140" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="48" font-weight="700">One ticket. Three bills.</text>
+  <text x="72" y="188" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="500">Uncached Standard. Each call under 272K input. OpenAI’s card, not a Vectoree invoice.</text>
+
+  <rect x="72" y="220" width="28" height="28" fill="#5c5c54"/>
+  <text x="112" y="242" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Glue · 12 × 4K in / 300 out</text>
+  <rect x="520" y="220" width="28" height="28" fill="#c8c8be"/>
+  <text x="560" y="242" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Draft · 6 × 12K in / 800 out</text>
+  <rect x="980" y="220" width="28" height="28" fill="#d8ff00"/>
+  <text x="1020" y="242" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Hard on Astra</text>
+  <rect x="1240" y="220" width="28" height="28" fill="#3d4d00" stroke="#d8ff00" stroke-width="2"/>
+  <text x="1280" y="242" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Hard on Sol</text>
+
+  <text x="72" y="330" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">All Astra</text>
+  <text x="72" y="360" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="500">20 steps on the flagship</text>
+  <rect x="360" y="312" width="258" height="56" fill="#5c5c54"/>
+  <rect x="618" y="312" width="376" height="56" fill="#c8c8be"/>
+  <rect x="994" y="312" width="266" height="56" fill="#d8ff00"/>
+  <text x="1280" y="348" fill="#d8ff00" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="700">$1.840</text>
+
+  <text x="72" y="470" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Sol, then Astra</text>
+  <text x="72" y="500" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="500">Hard steps stay on Astra</text>
+  <rect x="360" y="452" width="65" height="56" fill="#5c5c54"/>
+  <rect x="425" y="452" width="94" height="56" fill="#c8c8be"/>
+  <rect x="519" y="452" width="266" height="56" fill="#d8ff00"/>
+  <text x="810" y="488" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="700">$0.868</text>
+
+  <text x="72" y="610" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">All Sol</text>
+  <text x="72" y="640" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="500">Floor. Not the recommendation.</text>
+  <rect x="360" y="592" width="65" height="56" fill="#5c5c54"/>
+  <rect x="425" y="592" width="94" height="56" fill="#c8c8be"/>
+  <rect x="519" y="592" width="66" height="56" fill="#3d4d00" stroke="#d8ff00" stroke-width="2"/>
+  <text x="610" y="628" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="700">$0.460</text>
+
+  <text x="72" y="740" fill="#f3f3ec" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="600">Same tokens: 168,000 in and 12,400 out. All Astra is exactly 4× all Sol.</text>
+  <text x="72" y="784" fill="#c8c8be" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="500">All Astra is $1.840 / $0.868 ≈ 2.1× the split. The 4× card applies to tokens that actually move to Sol.</text>
+  <text x="72" y="836" fill="#9a9a92" font-family="Inter, ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="500">Bar widths match the three totals. Segment widths match glue, draft, and hard dollars inside each total. Replace the counts with yours.</text>
+</svg>
