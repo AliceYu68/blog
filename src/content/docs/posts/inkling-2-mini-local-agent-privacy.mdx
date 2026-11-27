@@ -1,0 +1,146 @@
+---
+title: "Inkling 2 Mini: Audit Your Tools Before Calling Your Agent Private"
+description: "Inkling 2 Mini can code offline on a laptop. Before you call your own agent private, audit remote tools, telemetry, and cloud fallbacks."
+cover: /covers/inkling-2-mini-local-agent-privacy.svg
+category: challenge
+tags:
+  - models
+  - agents
+  - integration
+  - gateway
+sidebar:
+  label: "Inkling 2 Mini and Agent Privacy"
+  order: 13
+nav:
+  "What did Inkling 2 Mini change?": "What changed with Inkling 2 Mini?"
+  "Where can a local agent send your code?": "Where can your code leave?"
+  "How would you catch a quiet cloud fallback?": "How do you test the boundary?"
+  "Which work should stay offline?": "Which work should stay offline?"
+  "Where does Vectoree fit in a local-first agent?": "Where does Vectoree fit?"
+  "When does this policy become overkill?": "When is this overkill?"
+  "Would you accept a failed task to keep a promise?": "Would you accept a failed task?"
+faq:
+  - question: Does Inkling 2 Mini run offline?
+    answer: Thinking Machines demonstrated the model building a flight simulator on a MacBook Pro in airplane mode. Your agent also needs local tools and dependencies to finish its own tasks without network access.
+  - question: How much memory does Inkling 2 Mini need?
+    answer: Thinking Machines lists an approximately 20 GB model memory footprint. That figure is not a total system RAM requirement or a guarantee for your context length, runtime, and concurrent workloads.
+  - question: Does MCP make an agent remote?
+    answer: No. MCP can connect an agent to a local server or a remote service. Inspect where each server runs, what it can access, and which requests it sends onward.
+  - question: Can I use Vectoree with a local-first agent?
+    answer: You can choose Vectoree for hosted tools or model calls that your application permits. Those calls cross a network boundary. Enforce approval and payload rules in your own application; this article does not claim that Vectoree supplies that enforcement or hosts Inkling 2 Mini.
+links:
+  - label: What should a gateway evaluation cover?
+    href: /posts/how-to-evaluate-an-llm-gateway/
+  - label: What does switching models cost?
+    href: /posts/the-real-cost-of-switching-models/
+  - label: How do I call models through Vectoree?
+    href: /posts/call-models-through-vectoree-gateway/
+---
+
+import CtaRow from '../../../components/post/CtaRow.astro';
+import PostLink from '../../../components/post/PostLink.astro';
+
+**Keep the privacy claim narrower than the network permissions.** Running Inkling 2 Mini on your laptop keeps inference there. Give the same agent a hosted search tool or a cloud fallback, and you need to explain which data you let it send.
+
+Thinking Machines released [Inkling 2 Mini on November 20](https://thinkingmachines.ai/news/inkling-2-mini/), with an offline flight-simulator demo on a MacBook Pro. The demo deserves attention. A developer can now consider local inference for work they might have sent to a hosted coding model.
+
+The mistake comes afterward: you swap the inference endpoint, keep the old tool configuration, and describe the whole agent as private. Before you make that promise to a customer, inspect the requests your agent can make after the model answers.
+
+<CtaRow />
+
+## What did Inkling 2 Mini change?
+
+Thinking Machines describes a mixture-of-experts model with **26.4 billion total parameters**, **3.4 billion active parameters**, and **5.4 billion weight activations per token** after accounting for looping. The model runs its middle layers **three times per token**. Those figures describe different things; use the provider's terms when comparing it with another model.
+
+The launch post gives an **approximately 20 GB model memory footprint**. Leave room for the runtime and the rest of your workload. Context and concurrency affect your deployment's memory needs. Treating that footprint as a complete laptop specification will produce a disappointing buying decision.
+
+The team offers hosted inference through Tinker. Choosing this model's name tells a reader less than choosing its deployment: local weights and a hosted endpoint give you different data paths.
+
+I have not benchmarked Inkling 2 Mini for this article. The engineering argument here concerns the surrounding agent. You can verify it without trusting a vendor score: inspect the tool definitions and the network permissions, then try to finish a representative task offline.
+
+## Where can a local agent send your code?
+
+Consider a hypothetical coding task. You ask an agent to fix an authentication bug in a private repository. The model reads the files through local tools and proposes a change. No remote inference so far.
+
+Then the agent searches for an error message. If it copies an internal hostname or a customer identifier into that query, you have sent private information to a search service. The model never left your machine.
+
+An MCP label cannot settle this question. A local MCP server might read files without network access. Another local server might forward arguments to a hosted API. A remote MCP server receives whatever arguments your client sends it. Follow the request beyond the first process.
+
+Audit the paths you enabled, rather than assuming an agent uses all of them:
+
+| Path to inspect | Possible outbound data | Decision you need to make |
+| --- | --- | --- |
+| Hosted search or page extraction | Query text, URLs, identifiers copied from a trace | Which fields may leave, and for which destination? |
+| Dependency installation | Registry requests; install scripts can execute code | May this task install packages, and in which sandbox? |
+| Hosted model fallback | The prompt and any context your client resends | Who may approve that payload leaving the machine? |
+| Remote traces and crash reports | Prompts, tool arguments, file paths, or exception text, depending on configuration | Can you disable content capture or keep the trace local? |
+
+These are review targets, not claims about Inkling's runtime. Your agent author chooses the tools and telemetry. You own those choices when you ship the wrapper.
+
+![A local model and repository sit inside a workstation boundary. Hosted search and cloud fallback sit outside. The application checks outbound arguments before permitting a request; local inference alone does not perform that check.](/posts/inkling-2-mini-local-agent-privacy/01-egress-boundary.svg)
+
+## How would you catch a quiet cloud fallback?
+
+Test a failure on purpose. Make the local inference server unavailable in a disposable environment. Repeat a task that would contain private code in production, using synthetic content for the test. Watch whether your client stops or tries another endpoint.
+
+A fallback configured months ago can sit in a wrapper you forgot to edit. A model picker showing “local” gives you no evidence about the exception handler.
+
+Use this acceptance test before you publish a privacy claim:
+
+1. Prepare a small fixture repository with synthetic identifiers. Keep real customer data out of the test.
+2. Record allowed destinations and permitted payload fields before the run. “Tools allowed” leaves too much unspecified.
+3. Observe outbound connections from the agent and its tool processes in your controlled environment. Inspect payloads only where you own the client or server, with test credentials.
+4. Deny outbound network access at the environment boundary. Check whether the task finishes or reports the blocked operation. A prompt asking the model to stay offline is insufficient enforcement.
+5. Take the local model down and repeat. Require an explicit failure for offline-only tasks. For tasks that allow a hosted fallback, verify approval before the client sends context.
+
+A clean run covers that fixture and configuration. Add cases for the shell tools and failure paths you permit. Network monitoring alone misses a queued trace that uploads after the run, so inspect local buffers and telemetry settings.
+
+[Switching models in production](/posts/the-real-cost-of-switching-models/) already requires checking prompts and context transfer. Moving inference onto a laptop adds another question: did you remove outbound context transfer, or just move it into a tool?
+
+## Which work should stay offline?
+
+Start with the promise you made about the input.
+
+For an offline-only task, keep inference and the necessary files on the machine. Disable hosted tools for that run and enforce network restrictions outside the model. If the task needs documentation you have not downloaded, let the agent report that limitation. A failed task can be the correct outcome under that contract.
+
+For work that permits selected remote lookups, separate public questions from private context. An agent can request the public signature of a library function without attaching your implementation. But you need to validate the actual query. The model's assertion that it removed secrets is weak evidence.
+
+Human approval also needs a useful screen. Show the destination and the exact outbound payload. “Allow search?” hides the part the reviewer needs to judge. If your application cannot show that payload, keep the operation disabled for sensitive tasks.
+
+Avoid a silent downgrade from offline-only to cloud-assisted. Ask the user to change the task's policy before any upload, with a preview of the content you plan to send. Do not interpret a slow local response as permission.
+
+## Where does Vectoree fit in a local-first agent?
+
+You may want local inference for repository work and hosted services for operations you choose to permit. That is a reasonable architecture, provided you describe it as a hybrid and enforce the boundary yourself.
+
+Vectoree's public [Tool Hub page](https://vectoree.ai/product/tool-hub) describes hosted MCP tools, including web search and page extraction, connected with a project API key. Calling those tools sends request arguments to a hosted service. Use them for approved public lookups; keep them out of an offline-only run.
+
+For hosted model calls, [Vectoree's homepage](https://vectoree.ai/) documents an OpenAI-compatible gateway at `https://vectoree.ai/api/v1`. Keep that client in an explicit cloud-enabled path. Check the catalog for the models you intend to use. This article does **not** claim that Vectoree serves Inkling 2 Mini.
+
+Your application must implement the egress checks described here. The public product pages do not establish an offline mode, a payload-approval system, or private-network enforcement. A gateway can give you a place to call hosted models. You still decide whether that call may contain this repository's code.
+
+Keep project credentials on the trusted server or agent host. Do not paste them into model prompts or include them in a browser bundle. Review tool arguments for secrets before you send them, even when the destination is one you approved.
+
+<PostLink href="/posts/how-to-evaluate-an-llm-gateway/">Which gateway claims should you test before trusting them?</PostLink>
+
+If you want hosted capabilities beside your local agent, [start with Vectoree](https://vectoree.ai/) and document the first permitted outbound request. Start with a public documentation query. Add private context only after you have a reason and the authority to send it.
+
+## When does this policy become overkill?
+
+A solo developer experimenting on a public repository may care about inference cost or working during a flight, without promising that no data leaves the machine. For that project, a permissive hosted search tool can save time. Label the setup with those limits and move on.
+
+A strict network deny also makes ordinary development awkward. You may need package downloads and live API docs. Approving every harmless query can train a reviewer to click through without reading. Preinstalled dependencies and an approved documentation mirror can reduce the interruptions, but you must maintain them.
+
+A hosted coding stack may suit your organization better than a laptop model. Your security team might already know how to manage its contracts and access controls. Local inference moves operational work onto your team; the word “local” cannot tell you whether your team does that work well.
+
+Choose the controls for the data and the promise. You can prefer a hosted agent and still reject unreviewed uploads. You can prefer local inference and still permit selected cloud calls. Record the distinction where the next developer can see it.
+
+<CtaRow />
+
+## Would you accept a failed task to keep a promise?
+
+Inkling 2 Mini gives developers a credible reason to try coding without hosted inference. Thinking Machines demonstrated an offline task. You still have to test the agent configuration you ship.
+
+Take your own wrapper, deny outbound traffic, and run a task. Inspect the first blocked request before you loosen the rule. You might need the service. You might decide the payload should never have reached it.
+
+For a task you labelled offline-only, would you accept failure, or ask the user to authorize a hosted retry? Pick a side with [@VectoreeAI](https://x.com/VectoreeAI) on X, and name the outbound request you would allow.

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img">
+  <title>Local inference with an outbound tool connection</title>
+  <desc>Conceptual architecture, not a Vectoree product screenshot. An open laptop holds a local model and a stack of files, with a green loop that stays inside the machine. A thick amber cable leaves the laptop, bends through a switch labeled Review Payload, and reaches a hosted search window.</desc>
+  <defs>
+    <marker id="cover-amber-arrow" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L18,9 L0,18 Z" fill="#BE7835"/>
+    </marker>
+    <marker id="cover-green-arrow" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L16,8 L0,16 Z" fill="#29755C"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="900" fill="#F6F3EA"/>
+  <text x="96" y="124" fill="#29755C" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="4.2">INKLING 2 MINI</text>
+  <text x="96" y="242" fill="#172522" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="92" font-weight="800" letter-spacing="-1.5">LOCAL MODEL</text>
+  <text x="96" y="354" fill="#172522" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="92" font-weight="800" letter-spacing="-1.5">REMOTE TOOLS</text>
+  <text x="824" y="366" fill="#BE7835" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="132" font-weight="800">?</text>
+
+  <!-- Amber cable under the switch so the crossing and the bend stay visible -->
+  <path d="M740,568 H948 C990,568 1004,524 1115,524 C1220,524 1250,600 1304,628" fill="none" stroke="#BE7835" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#cover-amber-arrow)"/>
+
+  <!-- Open laptop, cutaway workstation -->
+  <rect x="96" y="430" width="852" height="268" rx="26" fill="#E8E2D4" stroke="#172522" stroke-width="8"/>
+  <rect x="124" y="456" width="796" height="214" rx="14" fill="#F7F4EC"/>
+  <!-- Local loop, closed inside the cutaway -->
+  <path d="M250,486 H620 C690,486 724,524 724,575 C724,640 676,662 600,662 H250 C176,662 148,628 148,575 C148,520 184,486 250,486" fill="none" stroke="#29755C" stroke-width="8" stroke-linejoin="round" marker-end="url(#cover-green-arrow)"/>
+  <!-- Processor -->
+  <rect x="176" y="512" width="268" height="128" rx="16" fill="#29755C"/>
+  <rect x="196" y="532" width="228" height="88" rx="8" fill="none" stroke="#1E5A46" stroke-width="3"/>
+  <circle cx="214" cy="552" r="5" fill="#F6F3EA"/>
+  <circle cx="214" cy="576" r="5" fill="#F6F3EA"/>
+  <circle cx="214" cy="600" r="5" fill="#F6F3EA"/>
+  <circle cx="406" cy="552" r="5" fill="#F6F3EA"/>
+  <circle cx="406" cy="576" r="5" fill="#F6F3EA"/>
+  <circle cx="406" cy="600" r="5" fill="#F6F3EA"/>
+  <text x="310" y="586" fill="#F6F3EA" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="800" text-anchor="middle">LOCAL MODEL</text>
+  <!-- File stack -->
+  <rect x="548" y="500" width="156" height="122" rx="8" fill="#DDD6C8" stroke="#172522" stroke-width="3"/>
+  <rect x="526" y="522" width="156" height="122" rx="8" fill="#EBE4D6" stroke="#172522" stroke-width="3"/>
+  <rect x="504" y="544" width="156" height="122" rx="8" fill="#FFFdf8" stroke="#172522" stroke-width="4"/>
+  <path d="M528,582 H636 M528,610 H620 M528,638 H600" fill="none" stroke="#29755C" stroke-width="5" stroke-linecap="round"/>
+  <!-- Base and keyboard -->
+  <rect x="72" y="690" width="900" height="112" rx="18" fill="#E3DCD0" stroke="#172522" stroke-width="8"/>
+  <rect x="360" y="678" width="280" height="22" rx="6" fill="#172522"/>
+  <g fill="#172522" opacity="0.55">
+    <rect x="140" y="722" width="28" height="14" rx="3"/>
+    <rect x="176" y="722" width="28" height="14" rx="3"/>
+    <rect x="212" y="722" width="28" height="14" rx="3"/>
+    <rect x="248" y="722" width="28" height="14" rx="3"/>
+    <rect x="284" y="722" width="28" height="14" rx="3"/>
+    <rect x="320" y="722" width="28" height="14" rx="3"/>
+    <rect x="356" y="722" width="28" height="14" rx="3"/>
+    <rect x="392" y="722" width="52" height="14" rx="3"/>
+    <rect x="156" y="746" width="28" height="14" rx="3"/>
+    <rect x="192" y="746" width="28" height="14" rx="3"/>
+    <rect x="228" y="746" width="28" height="14" rx="3"/>
+    <rect x="264" y="746" width="28" height="14" rx="3"/>
+    <rect x="300" y="746" width="28" height="14" rx="3"/>
+    <rect x="336" y="746" width="28" height="14" rx="3"/>
+    <rect x="372" y="746" width="28" height="14" rx="3"/>
+  </g>
+  <rect x="470" y="746" width="150" height="32" rx="8" fill="#F6F3EA" stroke="#172522" stroke-width="3"/>
+
+  <!-- Review switch sitting on the cable -->
+  <rect x="990" y="468" width="250" height="132" rx="20" fill="#F6F3EA" stroke="#172522" stroke-width="6"/>
+  <rect x="1034" y="496" width="162" height="46" rx="23" fill="#E7E0D2" stroke="#172522" stroke-width="3"/>
+  <circle cx="1164" cy="519" r="17" fill="#BE7835" stroke="#172522" stroke-width="3"/>
+  <text x="1115" y="676" fill="#172522" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="800" text-anchor="middle">REVIEW PAYLOAD</text>
+
+  <!-- Hosted search window -->
+  <rect x="1310" y="492" width="200" height="286" rx="16" fill="#FFFdf8" stroke="#172522" stroke-width="6"/>
+  <text x="1410" y="546" fill="#172522" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="800" text-anchor="middle">HOSTED</text>
+  <text x="1410" y="584" fill="#172522" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="32" font-weight="800" text-anchor="middle">SEARCH</text>
+  <rect x="1330" y="608" width="160" height="40" rx="10" fill="#F6F3EA" stroke="#172522" stroke-width="3"/>
+  <circle cx="1350" cy="628" r="8" fill="none" stroke="#BE7835" stroke-width="3"/>
+  <path d="M1356,634 L1364,642" fill="none" stroke="#BE7835" stroke-width="3" stroke-linecap="round"/>
+  <rect x="1330" y="664" width="160" height="22" rx="6" fill="#E8E2D4"/>
+  <rect x="1330" y="698" width="136" height="22" rx="6" fill="#E8E2D4"/>
+  <rect x="1330" y="732" width="148" height="22" rx="6" fill="#E8E2D4"/>
+</svg>
